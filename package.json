@@ -30,7 +30,7 @@
     "jszip": "^3.10.0",
     "loglevel": "^1.8.0",
     "lru-cache": "^7.13.1",
-    "opensheetmusicdisplay": "file:redist/opensheetmusicdisplay-2.0.0.tgz",
+    "opensheetmusicdisplay": "^1.7.5",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.6",
     "tone": "^14.7.77",
