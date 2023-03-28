@@ -1,74 +1,163 @@
+<ion-menu type="reveal" side="end" contentId="main-content">
+  <ion-content>
+    <ion-list>
+    <ion-item-divider>
+      <ion-label>
+        Controls
+      </ion-label>
+    </ion-item-divider>
+      <ion-item>
+        <ion-label position="fixed">Range</ion-label>
+        <ion-input [(ngModel)]="inputMeasure.lower" (change)="updateLowerMeasure($event.target.value)"></ion-input>
+        &nbsp;-&nbsp;
+        <ion-input [(ngModel)]="inputMeasure.upper" (change)="updateUpperMeasure($event.target.value)"></ion-input>
+      </ion-item>
 
+      <ion-item>
+        <ion-label position="fixed">Loop</ion-label>
+        <ion-input type="number" [(ngModel)]="repeatText" (ionChange)="updateRepeat($event.target.value)"> </ion-input>
+      </ion-item>
 
+      <ion-item>
+        <ion-label position="fixed">Zoom</ion-label>
+        <ion-input type="number" [(ngModel)]="zoomText" (change)="updateZoom($event.target.value)">%</ion-input>
+      </ion-item>
 
-<ion-content [fullscreen]="false">
-  <div style="margin: 5%;">
-    <ion-label *ngIf="fileLoadError" color="danger">
-      <strong>{{'errorFile'| translate}}</strong><br><br>
-    </ion-label>
-  </div> 
-  <div style="background-color: white;" id="osmdContainer"></div>
-  <div *ngIf="!fileLoaded" style="margin: 5%;">
-    <ion-label *ngIf="!midiAvailable" color="danger">
-      <strong>{{'errorMidi'| translate}}</strong><br><br>
-    </ion-label> 
-    <ion-label id="instructions">
-    <strong>{{'openYourScore'| translate}}</strong><br><br>
-    {{'instructions1'| translate}}<br>
-    {{'instructions2a'| translate}}<ion-button color="dark" size="small" (click)="f.click()">{{'open'| translate}}</ion-button>{{'instructions2b'| translate}}<a href="https://musicxml.com/music-in-musicxml/" target="_blank"><strong> musicxml.com </strong></a><br>
-    &nbsp;&nbsp;e.g.:<br>
-    &nbsp;&nbsp;<ion-button color="dark" size="small" (click)="osmdLoadURL('https://michaelecke.com/pianoplay/assets/scores/October_Autumn_Song_from_Tchaikovskys_The_Seasons.mxl')">October</ion-button>
-    <ion-button color="dark" size="small" (click)="osmdLoadURL('https://michaelecke.com/pianoplay/assets/scores/Opus_27_No_2_Moonlight_Sonata_1st_movement.mxl')">Moonlight Sonata</ion-button><br>
-    &nbsp;&nbsp;<ion-button color="dark" size="small" (click)="osmdLoadURL('https://michaelecke.com/pianoplay/assets/scores/Passacaglia.mxl')">Passacaglia</ion-button>
-    <ion-button color="dark" size="small" (click)="osmdLoadURL('https://michaelecke.com/pianoplay/assets/scores/Prlude_No._4_in_E_Minor_Op._28_-_Frdric_Chopin.mxl')">Prelude in E Minor</ion-button><br><br>
-    {{'instructions3a'| translate}}<ion-button color="dark" size="small" disabled={{!fileLoaded}} (click)="osmdCursorStart()">{{'start'| translate}}</ion-button>{{'instructions3b'| translate}}<br><br><br>
-    <span [hidden]="isMobileLayout">{{'instructions4a'| translate}}<ion-checkbox checked color="dark" disabled></ion-checkbox>{{'instructions4b'| translate}}<br></span>
-    <span [hidden]="isMobileLayout">{{'instructions5a'| translate}}<img slot="start" src="assets/icon/music-box-multiple-outline.svg" style="width:24px;height:24px;">{{'instructions5b'| translate}}<br><br><br></span>
-    {{'instructions6a'| translate}}<a href="https://michaelecke.com" target="_blank"><strong>{{'openYourEyes'| translate}}</strong> ({{'photography'| translate}})</a>{{'instructions6b'| translate}}<br><br><br>
-    {{'instructions7'| translate}}<a href="mailto:rvilarl@gmail.com?subject=PianoPlay"><strong>rvilarl@gmail.com</strong></a><br><br>
-    </ion-label>
+      <ion-item>
+        <ion-label position="fixed">Tempo</ion-label>
+        <ion-input type="number" [(ngModel)]="speedText" (change)="updateSpeed($event.target.value)"></ion-input>
+      </ion-item>
+
+    <ion-item-divider>
+      <ion-label>
+        Settings
+      </ion-label>
+    </ion-item-divider>
+
+    <ion-item>
+      <ion-checkbox disabled={{running}} [(ngModel)]="checkboxStaveUp" slot="end"></ion-checkbox>
+      <ion-label>Upper Staff</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-checkbox disabled={{running}} [(ngModel)]="checkboxStaveDown" slot="end"></ion-checkbox>
+      <ion-label>Lower Staff</ion-label>
+    </ion-item>
+
+      <ion-item>
+        <ion-label>{{'keyboard'| translate}}</ion-label>
+        <ion-toggle [(ngModel)]="checkboxKeyboard"></ion-toggle>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>{{'color'| translate}}</ion-label>
+        <ion-toggle (ionChange)="osmdColor($event.detail.checked)" disabled="{{running}}"></ion-toggle>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="fill">Background</ion-label>
+        <ion-item><input type="color" [(ngModel)]="backgroundColor" disabled="{{running}}"></ion-item>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Language</ion-label>
+        <ion-select interface="popover" [(ngModel)]="lang" (ionChange)="useLanguage($event)">
+          <ion-select-option value="gb">🇬🇧 gb</ion-select-option>
+          <ion-select-option value="fr">🇫🇷 fr</ion-select-option>
+          <ion-select-option value="de">🇩🇪 de</ion-select-option>
+          <ion-select-option value="it">🇮🇹 it</ion-select-option>
+          <ion-select-option value="es">🇪🇸 es</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+  </ion-content>
+</ion-menu>
+
+<div class="ion-page" id="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <input class="ion-hide" #f type="file" (change)="osmdLoadFiles($event.target.files)" />
+
+      <ion-buttons slot="start">
+        <ion-button disabled="{{running}}" (click)="f.click()">
+          <ion-icon size="large" name="folder-open-outline"></ion-icon>
+        </ion-button>
+        <ion-button disabled="{{!fileLoaded||running}}" (click)="osmdPractice()">
+          <ion-icon size="large" name="play-outline"></ion-icon>
+        </ion-button>
+        <ion-button disabled="{{!fileLoaded||running}}" (click)="osmdPlay()">
+          <ion-icon size="large" name="volume-medium-outline"></ion-icon>
+        </ion-button>
+        <ion-button disabled="{{!running}}" (click)="osmdCursorStop()">
+          <ion-icon size="large" name="stop-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+
+      <ion-buttons slot="end">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content [fullscreen]="false">
+
+    <div style="margin: 5%">
+      <ion-label *ngIf="fileLoadError" color="danger">
+        <strong>{{'errorFile'| translate}}</strong>
+      </ion-label>
+    </div>
+
+    <div [style.backgroundColor] = "backgroundColor" id="osmdContainer"></div>
+
+    <div *ngIf="!fileLoaded" style="margin: 5%">
+      <ion-label *ngIf="!midiAvailable" color="danger">
+        <strong>{{'errorMidi'| translate}}</strong>
+      </ion-label>
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Open a Score</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-list>
+            <ion-item>1. {{'instructions1'| translate}}</ion-item>
+
+            <ion-item>
+              2. {{'instructions2a'| translate}} 
+              &nbsp;<a href="https://musicxml.com/music-in-musicxml/" target="_blank">MusicXML</a>&nbsp;
+              {{'instructions2b'| translate}} &nbsp;
+            </ion-item>
+
+            <ion-item> 3. {{'instructions3'| translate}}</ion-item>
+
+          </ion-list>
+        </ion-card-content>
+
+        <ion-button
+          fill="clear"
+          (click)="osmdLoadURL('/assets/scores/October_Autumn_Song_from_Tchaikovskys_The_Seasons.mxl')">
+          October
+        </ion-button>
+        <ion-button fill="clear" (click)="osmdLoadURL('/assets/scores/Opus_27_No_2_Moonlight_Sonata_1st_movement.mxl')">
+          Moonlight Sonata
+        </ion-button>
+        <ion-button fill="clear" (click)="osmdLoadURL('/assets/scores/Passacaglia.mxl')">
+          Passacaglia
+        </ion-button>
+        <ion-button
+          fill="clear"
+          (click)="osmdLoadURL('/assets/scores/Prlude_No._4_in_E_Minor_Op._28_-_Frdric_Chopin.mxl')">
+          Prelude in E Minor
+        </ion-button>
+      </ion-card>
+    </div>
+  </ion-content>
+
+  <ion-footer>
+    <ion-toolbar>
+      <app-piano-keyboard *ngIf="checkboxKeyboard"></app-piano-keyboard>
+    </ion-toolbar>
+  </ion-footer>
+
 </div>
-</ion-content>
-<ion-footer *ngIf="!isMobileLayout">
-  <ion-toolbar>
-    <app-piano-keyboard *ngIf="checkboxKeyboard"></app-piano-keyboard>
-    <ion-grid> 
-    <ion-row>
-      <ion-col size="3">
-        <ion-checkbox disabled={{running}} [(ngModel)]="checkboxStaveUp" color="dark"></ion-checkbox>
-        <ion-label color="dark">{{'upperStave'| translate}}</ion-label>
-      </ion-col>
-      <ion-col size="5">
-      </ion-col>
-      <ion-col size="4">
-        <ion-label>{{'midi'| translate}}: {{midiDevice}}</ion-label>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="3">
-        <ion-checkbox disabled={{running}} [(ngModel)]="checkboxStaveDown" color="dark"></ion-checkbox>
-        <ion-label color="dark">{{'lowerStave'| translate}}</ion-label>
-      </ion-col>
-      <ion-col size="5">
-      </ion-col>
-      <ion-col size="4">
-        <a href="https://michaelecke.com" target="_blank" color="secundary"><strong>{{'openYourEyes'| translate}}</strong> ({{'photography'| translate}})</a>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-toolbar>
-</ion-footer>
-<ion-footer *ngIf="isMobileLayout">
-  <ion-toolbar>
-  <ion-grid> 
-    <ion-row>
-      <ion-col size="4">
-        <ion-label>{{'midi'| translate}}: {{midiDevice}}</ion-label>
-      </ion-col>
-      <ion-col size="8">
-        <a href="https://michaelecke.com" target="_blank" color="secundary"><strong>{{'openYourEyes'| translate}}</strong> ({{'photography'| translate}})</a>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-toolbar>
-</ion-footer>

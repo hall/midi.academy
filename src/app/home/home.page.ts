@@ -39,9 +39,10 @@ export class HomePageComponent implements OnInit {
   repeatText: string = '0';
   repeatCfg: number = 0;
   zoomValue: number = 1;
-  zoomText: string = '100%';
+  zoomText: number = 100;
   speedValue: number = 1;
-  speedText: string = '100%';
+  speedText: number = 100;
+  backgroundColor: string = "#ffffff";
 
   // wakeLock used with Midi Input
   wakeLockObj?: WakeLockSentinel;
@@ -103,7 +104,7 @@ export class HomePageComponent implements OnInit {
     if (window.innerWidth <= 991) {
       this.isMobileLayout = true;
       this.zoomValue = 0.7;
-      this.zoomText = this.zoomValue * 100 + '%';
+      this.zoomText = this.zoomValue * 100;
       this.openSheetMusicDisplay.zoom = this.zoomValue;
     }
     window.onresize = () => (this.isMobileLayout = window.innerWidth <= 991);
@@ -111,9 +112,9 @@ export class HomePageComponent implements OnInit {
   }
 
   // GUI Language
-  useLanguage(language: string): void {
-    this.lang = language;
-    this.translate.use(language);
+  useLanguage(event: any): void {
+    this.lang = event.detail.value;
+    this.translate.use(event.detail.value);
   }
 
   // GUI Zoom
@@ -122,7 +123,7 @@ export class HomePageComponent implements OnInit {
     if (isNaN(this.zoomValue)) this.zoomValue = 1;
     if (this.zoomValue < 0.1) this.zoomValue = 0.1;
     if (this.zoomValue > 2) this.zoomValue = 2;
-    this.zoomText = (this.zoomValue * 100).toFixed(0) + '%';
+    this.zoomText = (this.zoomValue * 100);
     this.openSheetMusicDisplay.Zoom = this.zoomValue;
     this.openSheetMusicDisplay.render();
   }
@@ -133,7 +134,7 @@ export class HomePageComponent implements OnInit {
     if (isNaN(this.speedValue)) this.speedValue = 1;
     if (this.speedValue < 0.1) this.speedValue = 0.1;
     if (this.speedValue > 2) this.speedValue = 2;
-    this.speedText = (this.speedValue * 100).toFixed(0) + '%';
+    this.speedText = (this.speedValue * 100);
   }
 
   // GUI Repeat
