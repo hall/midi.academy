@@ -1,4 +1,4 @@
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -12,12 +12,17 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
+import { HomePageComponent } from './home/home.component';
 import { AppRoutingModule } from './app-routing.module';
+import { FormsModule } from '@angular/forms';
+import { PianoKeyboardComponent } from './keyboard/keyboard.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent,HomePageComponent,PianoKeyboardComponent],
   imports: [
     BrowserModule,
+    CommonModule,
+    FormsModule,
     IonicModule.forRoot(),
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),

@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
-import { NotesService } from '../notes.service';
+import { NotesService } from '../services/notes.service';
 
 @Component({
-  selector: 'app-piano-keyboard',
-  templateUrl: './piano-keyboard.component.html',
-  styleUrls: ['./piano-keyboard.component.scss'],
+  selector: 'app-keyboard',
+  templateUrl: './keyboard.component.html',
+  styleUrls: ['./keyboard.component.scss'],
 })
 export class PianoKeyboardComponent {
   // Piano keyboard

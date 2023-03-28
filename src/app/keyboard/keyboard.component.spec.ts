@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { PianoKeyboardComponent } from './piano-keyboard.component';
+import { PianoKeyboardComponent } from './keyboard.component';
 
 describe('PianoKeyboardComponent', () => {
   let component: PianoKeyboardComponent;

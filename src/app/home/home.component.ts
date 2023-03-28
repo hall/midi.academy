@@ -4,8 +4,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { Piano } from '@tonejs/piano';
 import { OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
 
-import { NotesService } from '../notes.service';
-import { PianoKeyboardComponent } from '../piano-keyboard/piano-keyboard.component';
+import { NotesService } from '../services/notes.service';
+import { PianoKeyboardComponent } from '../keyboard/keyboard.component';
 
 import MIDIAccess = WebMidi.MIDIAccess;
 import MIDIConnectionEvent = WebMidi.MIDIConnectionEvent;
@@ -15,8 +15,8 @@ import MIDIOutput = WebMidi.MIDIOutput;
 
 @Component({
   selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+  templateUrl: './home.component.html',
+  styleUrls: [],
 })
 export class HomePageComponent implements OnInit {
   @ViewChild(IonContent, { static: false }) content!: IonContent;
@@ -62,7 +62,7 @@ export class HomePageComponent implements OnInit {
   autoplaySkip: number = 0;
   tempoInBPM: number = 120;
 
-  // Language
+  // language
   lang: string = 'gb';
   // tonejs/piano
   piano: Piano;
@@ -81,10 +81,8 @@ export class HomePageComponent implements OnInit {
 
     this.piano.load();
 
-    //Set english as default
-    this.lang = 'gb';
-    this.translate.setDefaultLang('gb');
-    this.translate.use('gb');
+    this.translate.setDefaultLang(this.lang);
+    this.translate.use(this.lang);
   }
 
   ngOnInit(): void {
@@ -111,13 +109,11 @@ export class HomePageComponent implements OnInit {
     this.midiSetup();
   }
 
-  // GUI Language
   useLanguage(event: any): void {
     this.lang = event.detail.value;
     this.translate.use(event.detail.value);
   }
 
-  // GUI Zoom
   updateZoom(qp: string): void {
     this.zoomValue = parseInt(qp) / 100;
     if (isNaN(this.zoomValue)) this.zoomValue = 1;
@@ -128,7 +124,6 @@ export class HomePageComponent implements OnInit {
     this.openSheetMusicDisplay.render();
   }
 
-  // GUI Play speed
   updateSpeed(qp: string): void {
     this.speedValue = parseInt(qp) / 100;
     if (isNaN(this.speedValue)) this.speedValue = 1;
@@ -137,7 +132,6 @@ export class HomePageComponent implements OnInit {
     this.speedText = (this.speedValue * 100);
   }
 
-  // GUI Repeat
   updateRepeat(qp: string): void {
     this.repeatValue = parseInt(qp);
     if (isNaN(this.repeatValue)) this.repeatValue = 0;
@@ -634,9 +628,9 @@ export class HomePageComponent implements OnInit {
     const name = halbTone.toFixed();
     this.notesService.press(name);
 
-    // Key wrong pressed
+    // wrong key pressed
     if (!this.notesService.getMapRequired().has(name)) {
-      this.osmdTextFeedback('&#x1F4A9;', 0, 20);
+      this.osmdTextFeedback('❌', 0, 20);
     }
 
     if (this.pianoKeyboard) this.pianoKeyboard.updateNotesStatus();
