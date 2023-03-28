@@ -1,5 +1,3 @@
-// [PianoPlay](https://michaelecke.com/pianoplay) - Copyright (c) 2021 Rodrigo Jorge Vilar de Linares.
-
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -14,4 +12,4 @@ import { HomePageRoutingModule } from './home-routing.module';
   imports: [CommonModule, FormsModule, IonicModule, HomePageRoutingModule, TranslateModule],
   declarations: [HomePageComponent, PianoKeyboardComponent],
 })
-export class HomePageModule {}
+export class HomePageModule { }

@@ -1,5 +1,3 @@
-// [PianoPlay](https://michaelecke.com/pianoplay) - Copyright (c) 2021 Rodrigo Jorge Vilar de Linares.
-
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { IonContent } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';

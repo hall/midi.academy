@@ -1,5 +1,3 @@
-// [PianoPlay](https://michaelecke.com/pianoplay) - Copyright (c) 2021 Rodrigo Jorge Vilar de Linares.
-
 import { Component, OnInit } from '@angular/core';
 import { Meta } from '@angular/platform-browser';
 import { Platform } from '@ionic/angular';
