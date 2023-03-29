@@ -1,9 +1,16 @@
 {
-  inputs.dream2nix.url = "github:nix-community/dream2nix";
-  outputs = inp:
-    inp.dream2nix.lib.makeFlakeOutputs {
-      systems = [ "x86_64-linux" ];
-      source = ./.;
-      projects = ./projects.toml;
-    };
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs";
+    utils.url = "github:numtide/flake-utils";
+  };
+  outputs = inputs@{ self, ... }:
+    inputs.utils.lib.eachDefaultSystem (system:
+      let pkgs = inputs.nixpkgs.legacyPackages.${system}; in
+      {
+        devShell = with pkgs; mkShell {
+          buildInputs = [
+            nodejs
+          ];
+        };
+      });
 }
