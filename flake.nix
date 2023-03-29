@@ -7,10 +7,13 @@
     inputs.utils.lib.eachDefaultSystem (system:
       let pkgs = inputs.nixpkgs.legacyPackages.${system}; in
       {
-        devShell = with pkgs; mkShell {
+        devShells.default = with pkgs; mkShell {
           buildInputs = [
             nodejs
           ];
+          shellHook = ''
+            export PATH="$PATH:$PWD/node_modules/.bin"
+          '';
         };
       });
 }
