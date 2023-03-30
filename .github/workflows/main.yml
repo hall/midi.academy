@@ -1,7 +1,14 @@
 name: main
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 on:
-  pull_request:
   push:
+    branches:
+      - main
+    # paths:
+    #   - 'src/**'
 jobs:
   main:
     runs-on: ubuntu-latest
