@@ -3,7 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SettingsService {
   language: string = 'gb';
@@ -14,18 +14,16 @@ export class SettingsService {
   checkboxAutoplay: boolean = false;
   checkboxColor: boolean = false;
   checkboxKeyboard: boolean = false;
-  startMeasure = 0
-  endMeasure = 0
+  startMeasure = 0;
+  endMeasure = 0;
   repeat: number = 0;
   zoom: number = 100;
   speed: number = 100;
-  backgroundColor: string = "#ffffff";
+  backgroundColor: string = '#ffffff';
 
-  constructor(
-    public translate: TranslateService,
-  ) {
+  constructor(public translate: TranslateService) {
     this.translate.use(this.language);
-   }
+  }
 
   useLanguage(event: any): void {
     this.language = event.detail.value;
@@ -45,5 +43,4 @@ export class SettingsService {
     });
     osmd.render();
   }
-
 }

@@ -16,7 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { PianoKeyboardComponent } from './keyboard/keyboard.component';
 
 @NgModule({
-  declarations: [AppComponent,HomePageComponent,PianoKeyboardComponent],
+  declarations: [AppComponent, HomePageComponent, PianoKeyboardComponent],
   imports: [
     BrowserModule,
     CommonModule,
@@ -37,7 +37,7 @@ import { PianoKeyboardComponent } from './keyboard/keyboard.component';
   providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
 
 // required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {

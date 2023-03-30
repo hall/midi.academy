@@ -9,7 +9,7 @@ import MIDIInput = WebMidi.MIDIInput;
 import MIDIOutput = WebMidi.MIDIOutput;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MidiService {
   public onChange: EventEmitter<any> = new EventEmitter<any>();
@@ -27,10 +27,7 @@ export class MidiService {
   wakeLockObj?: WakeLockSentinel;
   wakeLockTimer?: number;
 
-  constructor(
-    private notes: NotesService,
-    private osmd: OsmdService,
-  ) {
+  constructor(private notes: NotesService, private osmd: OsmdService) {
     // Initialize MIDI
     navigator.requestMIDIAccess?.({ sysex: true }).then(this.success.bind(this), () => {
       this.available = false;
@@ -126,10 +123,11 @@ export class MidiService {
       this.osmd.textFeedback('❌', 0, 20);
     }
 
-    // TODO: if (this.homePageComponent.pianoKeyboard) 
+    // TODO: if (this.homePageComponent.pianoKeyboard)
     this.notes.updateNotesStatus();
-    if (this.notes.checkRequired()) // HomePageComponent.osmdCursorPlayMoveNext();
-     this.onChange.emit({});
+    if (this.notes.checkRequired())
+      // HomePageComponent.osmdCursorPlayMoveNext();
+      this.onChange.emit({});
   }
 
   // Midi input note released
@@ -138,10 +136,11 @@ export class MidiService {
     const name = halbTone.toFixed();
     this.notes.release(name);
 
-    // TODO: if (this.homePageComponent.pianoKeyboard) 
+    // TODO: if (this.homePageComponent.pianoKeyboard)
     this.notes.updateNotesStatus();
-    if (this.notes.checkRequired()) // HomePageComponent.osmdCursorPlayMoveNext();
-     this.onChange.emit({});
+    if (this.notes.checkRequired())
+      // HomePageComponent.osmdCursorPlayMoveNext();
+      this.onChange.emit({});
   }
 
   // Refresh wakelock for two minutes
@@ -165,5 +164,4 @@ export class MidiService {
       }, 120000);
     }
   }
-
 }

@@ -7,7 +7,6 @@ import { NotesService } from '../services/notes.service';
   styleUrls: ['./keyboard.component.scss'],
 })
 export class PianoKeyboardComponent {
-
   constructor(public notes: NotesService) {
     this.notes.keys = [];
     this.notes.keyStates = [];
@@ -38,5 +37,4 @@ export class PianoKeyboardComponent {
     }
     this.notes.keys = this.notes.keys.concat(['white c']);
   }
-
 }

@@ -7,6 +7,7 @@
     inputs.utils.lib.eachDefaultSystem (system:
       let pkgs = inputs.nixpkgs.legacyPackages.${system}; in
       {
+        # formatter = pkgs.nodejs.pkgs.prettier; # TODO: write inplace
         packages.default = with pkgs; let
           package = (with builtins; fromJSON (readFile ./package.json));
         in

@@ -31,7 +31,6 @@ export class NotesService {
   autoplaySkip: number = 0;
   tempoInBPM: number = 120;
 
-
   constructor() {
     // create the piano and load 1 velocity steps to reduce memory consumption
     this.piano = new Piano({
@@ -41,7 +40,6 @@ export class NotesService {
     this.piano.toDestination();
 
     this.piano.load();
-
   }
 
   getMapRequired(): Map<string, NoteObject> {

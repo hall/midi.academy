@@ -1,6 +1,7 @@
 {
-    "cSpell.words": [
-        "opensheetmusicdisplay",
-        "osmd"
-    ]
+  "cSpell.words": [
+    "opensheetmusicdisplay",
+    "osmd"
+  ],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
 }

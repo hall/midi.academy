@@ -7,7 +7,7 @@ import { MidiService } from '../services/midi.service';
 import { PianoKeyboardComponent } from '../keyboard/keyboard.component';
 import { SettingsService } from '../services/settings.service';
 import { OsmdService } from '../services/osmd.service';
-import { version } from '../../../package.json'
+import { version } from '../../../package.json';
 
 @Component({
   selector: 'app-home',
@@ -31,7 +31,7 @@ export class HomePageComponent implements OnInit {
     public midi: MidiService,
     public settings: SettingsService,
     private osmdService: OsmdService,
-    public changeRef: ChangeDetectorRef,
+    public changeRef: ChangeDetectorRef
   ) {
     midi.onChange.subscribe(this.osmdCursorPlayMoveNext());
   }
@@ -61,11 +61,11 @@ export class HomePageComponent implements OnInit {
   osmdLoadFiles(files: Blob[]): void {
     const reader = new FileReader();
     reader.onload = (event: ProgressEvent<FileReader>) => {
-      this.osmdLoadURL(event.target?.result?.toString() ?? '')
+      this.osmdLoadURL(event.target?.result?.toString() ?? '');
     };
-    files.forEach(file => {
+    files.forEach((file) => {
       reader.readAsBinaryString(file);
-    })
+    });
   }
 
   osmdLoadURL(url: string): void {
@@ -118,8 +118,7 @@ export class HomePageComponent implements OnInit {
       const it2 = this.osmd.cursors[1].iterator.clone();
       it2.moveToNext();
       timeout =
-        ((it2.CurrentSourceTimestamp.RealValue -
-          this.osmd.cursors[1].iterator.CurrentSourceTimestamp.RealValue) *
+        ((it2.CurrentSourceTimestamp.RealValue - this.osmd.cursors[1].iterator.CurrentSourceTimestamp.RealValue) *
           4 *
           60000) /
         this.notes.tempoInBPM /
@@ -179,11 +178,7 @@ export class HomePageComponent implements OnInit {
     // Move to next
     if (!this.osmdCursorMoveNext(0)) return;
     // Calculate notes
-    this.notes.calculateRequired(
-      this.osmd.cursors[0],
-      this.settings.checkboxStaveUp,
-      this.settings.checkboxStaveDown
-    );
+    this.notes.calculateRequired(this.osmd.cursors[0], this.settings.checkboxStaveUp, this.settings.checkboxStaveDown);
     this.notes.tempoInBPM = this.notes.tempoInBPM;
     // Update keyboard
     if (this.pianoKeyboard) this.notes.updateNotesStatus();
@@ -296,8 +291,7 @@ export class HomePageComponent implements OnInit {
     const it2 = this.osmd.cursors[0].iterator.clone();
     it2.moveToNext();
     const timeout =
-      ((it2.CurrentSourceTimestamp.RealValue -
-        this.osmd.cursors[0].iterator.CurrentSourceTimestamp.RealValue) *
+      ((it2.CurrentSourceTimestamp.RealValue - this.osmd.cursors[0].iterator.CurrentSourceTimestamp.RealValue) *
         4 *
         60000) /
       this.notes.tempoInBPM /
@@ -306,5 +300,4 @@ export class HomePageComponent implements OnInit {
       this.osmdCursorTempoMoveNext();
     }, timeout);
   }
-
 }

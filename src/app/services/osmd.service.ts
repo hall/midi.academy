@@ -2,13 +2,10 @@ import { Injectable } from '@angular/core';
 import { SettingsService } from './settings.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OsmdService {
-
-  constructor(
-    private settings: SettingsService
-  ) { }
+  constructor(private settings: SettingsService) {}
 
   resetFeedback(): void {
     let elems = document.getElementsByClassName('feedback');

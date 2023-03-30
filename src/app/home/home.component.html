@@ -1,47 +1,52 @@
 <ion-menu side="end" contentId="main-content">
   <ion-content>
     <ion-list>
-    <ion-item-divider>
-      <ion-label>
-        Controls
-      </ion-label>
-    </ion-item-divider>
+      <ion-item-divider>
+        <ion-label>
+          Controls
+        </ion-label>
+      </ion-item-divider>
       <ion-item>
         <ion-label position="fixed">Range</ion-label>
-        <ion-input min=0 [(ngModel)]="settings.startMeasure" (change)="settings.startMeasure = $event.target.value"></ion-input>
+        <ion-input min=0 [(ngModel)]="settings.startMeasure"
+          (change)="settings.startMeasure = $event.target.value"></ion-input>
         &nbsp;-&nbsp;
-        <ion-input min=0 [(ngModel)]="settings.endMeasure" (change)="settings.endMeasure = $event.target.value"></ion-input>
+        <ion-input min=0 [(ngModel)]="settings.endMeasure"
+          (change)="settings.endMeasure = $event.target.value"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="fixed">Repeat</ion-label>
-        <ion-input min=0 max=10 type="number" [(ngModel)]="settings.repeat" (ionChange)="settings.repeat = $event.target.value"> </ion-input>
+        <ion-input min=0 max=10 type="number" [(ngModel)]="settings.repeat"
+          (ionChange)="settings.repeat = $event.target.value"> </ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="fixed">Zoom (%)</ion-label>
-        <ion-input min=10 max=200 type="number" [(ngModel)]="settings.zoom" (change)="settings.updateZoom($event.target.value, osmd)"></ion-input>
+        <ion-input min=10 max=200 type="number" [(ngModel)]="settings.zoom"
+          (change)="settings.updateZoom($event.target.value, osmd)"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="fixed">Tempo (%)</ion-label>
-        <ion-input min=10 max=200 type="number" [(ngModel)]="settings.speed" (change)="settings.speed = $event.target.value"></ion-input>
+        <ion-input min=10 max=200 type="number" [(ngModel)]="settings.speed"
+          (change)="settings.speed = $event.target.value"></ion-input>
       </ion-item>
 
-    <ion-item-divider>
-      <ion-label>
-        Settings
-      </ion-label>
-    </ion-item-divider>
+      <ion-item-divider>
+        <ion-label>
+          Settings
+        </ion-label>
+      </ion-item-divider>
 
-    <ion-item>
-      <ion-checkbox disabled={{running}} [(ngModel)]="settings.checkboxStaveUp" slot="end"></ion-checkbox>
-      <ion-label>Upper Staff</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-checkbox disabled={{running}} [(ngModel)]="settings.checkboxStaveDown" slot="end"></ion-checkbox>
-      <ion-label>Lower Staff</ion-label>
-    </ion-item>
+      <ion-item>
+        <ion-checkbox disabled={{running}} [(ngModel)]="settings.checkboxStaveUp" slot="end"></ion-checkbox>
+        <ion-label>Upper Staff</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-checkbox disabled={{running}} [(ngModel)]="settings.checkboxStaveDown" slot="end"></ion-checkbox>
+        <ion-label>Lower Staff</ion-label>
+      </ion-item>
 
       <ion-item>
         <ion-label>{{'keyboard'| translate}}</ion-label>
@@ -76,12 +81,12 @@
       </ion-item-divider>
 
       <ion-item>
-         <ion-label>{{midi.device}}</ion-label>
-         <ion-note>{{'midi'| translate}}</ion-note>
+        <ion-label>{{midi.device}}</ion-label>
+        <ion-note>{{'midi'| translate}}</ion-note>
       </ion-item>
       <ion-item>
-         <ion-label>{{version}}</ion-label>
-         <ion-note>Version</ion-note>
+        <ion-label>{{version}}</ion-label>
+        <ion-note>Version</ion-note>
       </ion-item>
     </ion-list>
 
@@ -119,18 +124,18 @@
 
   <ion-content [fullscreen]="false">
 
-    <div [style.backgroundColor] = "settings.backgroundColor" id="osmdContainer"></div>
+    <div [style.backgroundColor]="settings.backgroundColor" id="osmdContainer"></div>
 
     <div *ngIf="!fileLoaded" style="margin: 3em">
 
       <span style="position: fixed; margin-top: -2em">
-      <ion-label *ngIf="fileLoadError" color="danger">
-        {{'errorFile'| translate}}
-      </ion-label>
+        <ion-label *ngIf="fileLoadError" color="danger">
+          {{'errorFile'| translate}}
+        </ion-label>
 
-      <ion-label *ngIf="!midi.available" color="danger">
-        {{'errorMidi'| translate}}
-      </ion-label>
+        <ion-label *ngIf="!midi.available" color="danger">
+          {{'errorMidi'| translate}}
+        </ion-label>
       </span>
 
       <ion-card>
@@ -143,7 +148,7 @@
             <ion-item>1. {{'instructions1'| translate}}</ion-item>
 
             <ion-item>
-              2. {{'instructions2a'| translate}} 
+              2. {{'instructions2a'| translate}}
               &nbsp;<a href="https://musicxml.com/music-in-musicxml/" target="_blank">MusicXML</a>&nbsp;
               {{'instructions2b'| translate}} &nbsp;
             </ion-item>
@@ -152,7 +157,8 @@
           </ion-list>
         </ion-card-content>
 
-        <ion-button fill="clear" (click)="osmdLoadURL('/assets/scores/ctober_Autumn_Song_from_Tchaikovskys_The_Seasons.mxl')">
+        <ion-button fill="clear"
+          (click)="osmdLoadURL('/assets/scores/October_Autumn_Song_from_Tchaikovskys_The_Seasons.mxl')">
           October
         </ion-button>
         <ion-button fill="clear" (click)="osmdLoadURL('/assets/scores/Opus_27_No_2_Moonlight_Sonata_1st_movement.mxl')">
@@ -161,7 +167,8 @@
         <ion-button fill="clear" (click)="osmdLoadURL('/assets/scores/Passacaglia.mxl')">
           Passacaglia
         </ion-button>
-        <ion-button fill="clear" (click)="osmdLoadURL('/assets/scores/Prlude_No._4_in_E_Minor_Op._28_-_Frdric_Chopin.mxl')">
+        <ion-button fill="clear"
+          (click)="osmdLoadURL('/assets/scores/Prlude_No._4_in_E_Minor_Op._28_-_Frdric_Chopin.mxl')">
           Prelude in E Minor
         </ion-button>
 
@@ -171,7 +178,7 @@
 
   <ion-footer *ngIf="settings.checkboxKeyboard">
     <ion-toolbar>
-      <app-keyboard ></app-keyboard>
+      <app-keyboard></app-keyboard>
     </ion-toolbar>
   </ion-footer>
 

@@ -16,6 +16,7 @@
     "import/no-duplicates": "error",
     "import/newline-after-import": "warn"
   },
+  "ignorePatterns": ["*.html", "*.spec.ts"],
   "overrides": [
     {
       "files": ["**/*.ts"],
@@ -27,9 +28,7 @@
       ],
       "rules": {
         "@typescript-eslint/no-inferrable-types": "off",
-        "simple-import-sort/imports": [
-          "warn"
-        ]
+        "simple-import-sort/imports": ["warn"]
       }
     },
     {

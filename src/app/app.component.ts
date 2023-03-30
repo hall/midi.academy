@@ -8,11 +8,7 @@ import { Platform } from '@ionic/angular';
   styleUrls: [],
 })
 export class AppComponent implements OnInit {
-  constructor(
-    private metaTagService: Meta,
-    private platform: Platform,
-  ) {
-  }
+  constructor(private metaTagService: Meta, private platform: Platform) {}
 
   ngOnInit(): void {
     this.metaTagService.addTags([
