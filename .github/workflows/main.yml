@@ -36,11 +36,11 @@ jobs:
           tag_name: ${{ steps.changelog.outputs.version }}
 
       - name: upload
-        needs: release
+        if: steps.release.outcome == 'success'
         uses: actions/upload-pages-artifact@v1
         with:
           path: ./result
 
       - name: deploy
-        needs: release
+        if: steps.release.outcome == 'success'
         uses: actions/deploy-pages@v1
