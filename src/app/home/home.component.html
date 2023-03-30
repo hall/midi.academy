@@ -2,94 +2,114 @@
   <ion-content>
     <ion-list>
       <ion-item-divider>
-        <ion-label>
-          Controls
-        </ion-label>
+        <ion-label> Controls </ion-label>
       </ion-item-divider>
       <ion-item>
-        <ion-label position="fixed">Range</ion-label>
-        <ion-input min=0 [(ngModel)]="settings.startMeasure"
-          (change)="settings.startMeasure = $event.target.value"></ion-input>
+        <ion-label position="fixed">Bars</ion-label>
+        <ion-input
+          min="0"
+          type="number"
+          aria-label="Start Bar"
+          [(ngModel)]="settings.startMeasure"
+          (change)="settings.startMeasure = $event.target.value"
+        ></ion-input>
         &nbsp;-&nbsp;
-        <ion-input min=0 [(ngModel)]="settings.endMeasure"
-          (change)="settings.endMeasure = $event.target.value"></ion-input>
+        <ion-input
+          min="0"
+          type="number"
+          aria-label="End Bar"
+          [(ngModel)]="settings.endMeasure"
+          (change)="settings.endMeasure = $event.target.value"
+        ></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="fixed">Repeat</ion-label>
-        <ion-input min=0 max=10 type="number" [(ngModel)]="settings.repeat"
-          (ionChange)="settings.repeat = $event.target.value"> </ion-input>
+        <ion-input
+          min="0"
+          max="10"
+          type="number"
+          label="Repeat"
+          labelPlacement="fixed"
+          [(ngModel)]="settings.repeat"
+          (ionChange)="settings.repeat = $event.target.value"
+        >
+        </ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="fixed">Zoom (%)</ion-label>
-        <ion-input min=10 max=200 type="number" [(ngModel)]="settings.zoom"
-          (change)="settings.updateZoom($event.target.value, osmd)"></ion-input>
+        <ion-input
+          min="10"
+          max="200"
+          type="number"
+          label="Zoom (%)"
+          labelPlacement="fixed"
+          [(ngModel)]="settings.zoom"
+          (change)="settings.updateZoom($event.target.value, osmd)"
+        ></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="fixed">Tempo (%)</ion-label>
-        <ion-input min=10 max=200 type="number" [(ngModel)]="settings.speed"
-          (change)="settings.speed = $event.target.value"></ion-input>
+        <ion-input
+          min="10"
+          max="200"
+          type="number"
+          label="Tempo (%)"
+          labelPlacement="fixed"
+          [(ngModel)]="settings.speed"
+          (change)="settings.speed = $event.target.value"
+        ></ion-input>
       </ion-item>
 
       <ion-item-divider>
-        <ion-label>
-          Settings
-        </ion-label>
+        <ion-label> Settings </ion-label>
       </ion-item-divider>
 
       <ion-item>
-        <ion-checkbox disabled={{running}} [(ngModel)]="settings.checkboxStaveUp" slot="end"></ion-checkbox>
-        <ion-label>Upper Staff</ion-label>
+        <ion-checkbox disabled="{{ running }}" [(ngModel)]="settings.checkboxStaveUp">Upper Staff</ion-checkbox>
       </ion-item>
       <ion-item>
-        <ion-checkbox disabled={{running}} [(ngModel)]="settings.checkboxStaveDown" slot="end"></ion-checkbox>
-        <ion-label>Lower Staff</ion-label>
+        <ion-checkbox disabled="{{ running }}" [(ngModel)]="settings.checkboxStaveDown">Lower Staff</ion-checkbox>
       </ion-item>
 
       <ion-item>
-        <ion-label>{{'keyboard'| translate}}</ion-label>
-        <ion-toggle [(ngModel)]="settings.checkboxKeyboard"></ion-toggle>
+        <ion-toggle [(ngModel)]="settings.checkboxKeyboard"> {{ 'keyboard' | translate }}</ion-toggle>
       </ion-item>
 
       <ion-item>
-        <ion-label>{{'color'| translate}}</ion-label>
-        <ion-toggle (ionChange)="settings.updateColor($event.detail.checked, osmd)" disabled="{{running}}"></ion-toggle>
+        <ion-toggle (ionChange)="settings.updateColor($event.detail.checked, osmd)" disabled="{{ running }}">
+          {{ 'color' | translate }}
+        </ion-toggle>
       </ion-item>
 
       <ion-item>
         <ion-label position="fill">Background</ion-label>
-        <ion-item><input type="color" [(ngModel)]="settings.backgroundColor" disabled="{{running}}"></ion-item>
+        <ion-item><input type="color" [(ngModel)]="settings.backgroundColor" disabled="{{ running }}" /></ion-item>
       </ion-item>
 
       <ion-item>
-        <ion-label>Language</ion-label>
         <ion-select interface="popover" [(ngModel)]="settings.language" (ionChange)="settings.useLanguage($event)">
           <ion-select-option value="gb">🇬🇧 gb</ion-select-option>
           <ion-select-option value="fr">🇫🇷 fr</ion-select-option>
           <ion-select-option value="de">🇩🇪 de</ion-select-option>
           <ion-select-option value="it">🇮🇹 it</ion-select-option>
           <ion-select-option value="es">🇪🇸 es</ion-select-option>
+          Language
         </ion-select>
       </ion-item>
 
       <ion-item-divider>
-        <ion-label>
-          Info
-        </ion-label>
+        <ion-label>Info</ion-label>
       </ion-item-divider>
 
       <ion-item>
-        <ion-label>{{midi.device}}</ion-label>
-        <ion-note>{{'midi'| translate}}</ion-note>
+        <ion-label>{{ midi.device }}</ion-label>
+        <ion-note>{{ 'midi' | translate }}</ion-note>
       </ion-item>
       <ion-item>
-        <ion-label>{{version}}</ion-label>
+        <ion-label>{{ version }}</ion-label>
         <ion-note>Version</ion-note>
       </ion-item>
     </ion-list>
-
   </ion-content>
 </ion-menu>
 
@@ -98,23 +118,20 @@
 <div class="ion-page" id="main-content">
   <ion-header>
     <ion-toolbar>
-
       <ion-buttons slot="start">
-        <ion-button disabled="{{running}}" (click)="f.click()">
+        <ion-button disabled="{{ running }}" (click)="f.click()">
           <ion-icon size="large" name="folder-open-outline"></ion-icon>
         </ion-button>
-        <ion-button disabled="{{!fileLoaded||running}}" (click)="osmdPractice()">
+        <ion-button disabled="{{ !fileLoaded || running }}" (click)="osmdPractice()">
           <ion-icon size="large" name="play-outline"></ion-icon>
         </ion-button>
-        <ion-button disabled="{{!fileLoaded||running}}" (click)="osmdPlay()">
+        <ion-button disabled="{{ !fileLoaded || running }}" (click)="osmdPlay()">
           <ion-icon size="large" name="volume-medium-outline"></ion-icon>
         </ion-button>
-        <ion-button disabled="{{!running}}" (click)="osmdCursorStop()">
+        <ion-button disabled="{{ !running }}" (click)="osmdCursorStop()">
           <ion-icon size="large" name="stop-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
-
-      <!-- <ion-title>midi.academy</ion-title> -->
 
       <ion-buttons slot="end">
         <ion-menu-button></ion-menu-button>
@@ -123,18 +140,16 @@
   </ion-header>
 
   <ion-content [fullscreen]="false">
-
     <div [style.backgroundColor]="settings.backgroundColor" id="osmdContainer"></div>
 
     <div *ngIf="!fileLoaded" style="margin: 3em">
-
       <span style="position: fixed; margin-top: -2em">
         <ion-label *ngIf="fileLoadError" color="danger">
-          {{'errorFile'| translate}}
+          {{ 'errorFile' | translate }}
         </ion-label>
 
         <ion-label *ngIf="!midi.available" color="danger">
-          {{'errorMidi'| translate}}
+          {{ 'errorMidi' | translate }}
         </ion-label>
       </span>
 
@@ -145,15 +160,17 @@
 
         <ion-card-content>
           <ion-list>
-            <ion-item>1. {{'instructions1'| translate}}</ion-item>
+            <ion-item>1. {{ 'instructions1' | translate }}</ion-item>
 
             <ion-item>
-              2. {{'instructions2a'| translate}}
-              &nbsp;<a href="https://musicxml.com/music-in-musicxml/" target="_blank">MusicXML</a>&nbsp;
-              {{'instructions2b'| translate}} &nbsp;
+              2. {{ 'instructions2a' | translate }} &nbsp;<a
+                href="https://musicxml.com/music-in-musicxml/"
+                target="_blank"
+                >MusicXML</a
+              >&nbsp; {{ 'instructions2b' | translate }} &nbsp;
             </ion-item>
 
-            <ion-item> 3. {{'instructions3'| translate}}</ion-item>
+            <ion-item> 3. {{ 'instructions3' | translate }}</ion-item>
           </ion-list>
         </ion-card-content>
 
@@ -174,5 +191,4 @@
       <app-keyboard></app-keyboard>
     </ion-toolbar>
   </ion-footer>
-
 </div>
