@@ -1,7 +1,16 @@
 {
-  "cSpell.words": [
-    "opensheetmusicdisplay",
-    "osmd"
-  ],
+  "cSpell.words": ["opensheetmusicdisplay", "osmd"],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    // above this line are the default values
+    "node_modules": true,
+    ".angular": true,
+    ".direnv": true
+  }
 }
