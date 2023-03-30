@@ -1,4 +1,4 @@
-# Piano Play
+# midi.academy
 
 Interactively play along with a MusicXML score using a MIDI instrument.
 
@@ -7,4 +7,4 @@ Interactively play along with a MusicXML score using a MIDI instrument.
 
 ## attribution
 
-Forked from https://github.com/rvilarl/pianoplay.
+This project was initially forked from https://github.com/rvilarl/pianoplay.

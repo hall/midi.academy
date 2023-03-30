@@ -1,9 +1,9 @@
 {
-  "name": "pianoplay",
-  "description": "Interactive MusicXML MIDI player",
+  "name": "midi.academy",
+  "description": "Interactive MIDI learning",
   "version": "0.0.1",
   "author": "",
-  "homepage": "https://github.com/hall/pianoplay/",
+  "homepage": "https://midi.academy",
   "scripts": {
     "start": "ng serve",
     "build": "ng build --configuration production",
