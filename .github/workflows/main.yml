@@ -1,0 +1,46 @@
+name: main
+on:
+  pull_request:
+  push:
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v3
+
+      - name: install nix
+        uses: cachix/install-nix-action@v18
+
+      - name: check flake
+        run: nix flake check
+
+      - name: build package
+        run: nix build
+
+      - name: get latest tag
+        id: latest
+        uses: actions-ecosystem/action-get-latest-tag@v1
+
+      - name: parse changelog
+        id: changelog
+        uses: coditory/changelog-parser@v1
+
+      - name: create release
+        id: release
+        uses: softprops/action-gh-release@v1
+        if: github.ref == 'refs/heads/main' && steps.changelog.outputs.version != steps.latest.outputs.tag
+        with:
+          # files: ./result (TODO: would need to archive)
+          body: ${{ steps.changelog.outputs.description }}
+          tag_name: ${{ steps.changelog.outputs.version }}
+
+      - name: upload
+        needs: release
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./result
+
+      - name: deploy
+        needs: release
+        uses: actions/deploy-pages@v1
