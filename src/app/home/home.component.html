@@ -1,4 +1,4 @@
-<ion-menu type="reveal" side="end" contentId="main-content">
+<ion-menu side="end" contentId="main-content">
   <ion-content>
     <ion-list>
     <ion-item-divider>
@@ -8,24 +8,24 @@
     </ion-item-divider>
       <ion-item>
         <ion-label position="fixed">Range</ion-label>
-        <ion-input [(ngModel)]="inputMeasure.lower" (change)="updateLowerMeasure($event.target.value)"></ion-input>
+        <ion-input min=0 [(ngModel)]="settings.startMeasure" (change)="settings.startMeasure = $event.target.value"></ion-input>
         &nbsp;-&nbsp;
-        <ion-input [(ngModel)]="inputMeasure.upper" (change)="updateUpperMeasure($event.target.value)"></ion-input>
+        <ion-input min=0 [(ngModel)]="settings.endMeasure" (change)="settings.endMeasure = $event.target.value"></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="fixed">Loop</ion-label>
-        <ion-input type="number" [(ngModel)]="repeatText" (ionChange)="updateRepeat($event.target.value)"> </ion-input>
+        <ion-label position="fixed">Repeat</ion-label>
+        <ion-input min=0 max=10 type="number" [(ngModel)]="settings.repeat" (ionChange)="settings.repeat = $event.target.value"> </ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="fixed">Zoom</ion-label>
-        <ion-input type="number" [(ngModel)]="zoomText" (change)="updateZoom($event.target.value)">%</ion-input>
+        <ion-label position="fixed">Zoom (%)</ion-label>
+        <ion-input min=10 max=200 type="number" [(ngModel)]="settings.zoom" (change)="settings.updateZoom($event.target.value, osmd)"></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="fixed">Tempo</ion-label>
-        <ion-input type="number" [(ngModel)]="speedText" (change)="updateSpeed($event.target.value)"></ion-input>
+        <ion-label position="fixed">Tempo (%)</ion-label>
+        <ion-input min=10 max=200 type="number" [(ngModel)]="settings.speed" (change)="settings.speed = $event.target.value"></ion-input>
       </ion-item>
 
     <ion-item-divider>
@@ -35,32 +35,32 @@
     </ion-item-divider>
 
     <ion-item>
-      <ion-checkbox disabled={{running}} [(ngModel)]="checkboxStaveUp" slot="end"></ion-checkbox>
+      <ion-checkbox disabled={{running}} [(ngModel)]="settings.checkboxStaveUp" slot="end"></ion-checkbox>
       <ion-label>Upper Staff</ion-label>
     </ion-item>
     <ion-item>
-      <ion-checkbox disabled={{running}} [(ngModel)]="checkboxStaveDown" slot="end"></ion-checkbox>
+      <ion-checkbox disabled={{running}} [(ngModel)]="settings.checkboxStaveDown" slot="end"></ion-checkbox>
       <ion-label>Lower Staff</ion-label>
     </ion-item>
 
       <ion-item>
         <ion-label>{{'keyboard'| translate}}</ion-label>
-        <ion-toggle [(ngModel)]="checkboxKeyboard"></ion-toggle>
+        <ion-toggle [(ngModel)]="settings.checkboxKeyboard"></ion-toggle>
       </ion-item>
 
       <ion-item>
         <ion-label>{{'color'| translate}}</ion-label>
-        <ion-toggle (ionChange)="osmdColor($event.detail.checked)" disabled="{{running}}"></ion-toggle>
+        <ion-toggle (ionChange)="settings.updateColor($event.detail.checked, osmd)" disabled="{{running}}"></ion-toggle>
       </ion-item>
 
       <ion-item>
         <ion-label position="fill">Background</ion-label>
-        <ion-item><input type="color" [(ngModel)]="backgroundColor" disabled="{{running}}"></ion-item>
+        <ion-item><input type="color" [(ngModel)]="settings.backgroundColor" disabled="{{running}}"></ion-item>
       </ion-item>
 
       <ion-item>
         <ion-label>Language</ion-label>
-        <ion-select interface="popover" [(ngModel)]="lang" (ionChange)="useLanguage($event)">
+        <ion-select interface="popover" [(ngModel)]="settings.language" (ionChange)="settings.useLanguage($event)">
           <ion-select-option value="gb">🇬🇧 gb</ion-select-option>
           <ion-select-option value="fr">🇫🇷 fr</ion-select-option>
           <ion-select-option value="de">🇩🇪 de</ion-select-option>
@@ -68,15 +68,31 @@
           <ion-select-option value="es">🇪🇸 es</ion-select-option>
         </ion-select>
       </ion-item>
+
+      <ion-item-divider>
+        <ion-label>
+          Info
+        </ion-label>
+      </ion-item-divider>
+
+      <ion-item>
+         <ion-label>{{midi.device}}</ion-label>
+         <ion-note>{{'midi'| translate}}</ion-note>
+      </ion-item>
+      <ion-item>
+         <ion-label>{{version}}</ion-label>
+         <ion-note>Version</ion-note>
+      </ion-item>
     </ion-list>
 
   </ion-content>
 </ion-menu>
 
+<input class="ion-hide" #f type="file" (change)="osmdLoadFiles($event.target.files)" />
+
 <div class="ion-page" id="main-content">
   <ion-header>
     <ion-toolbar>
-      <input class="ion-hide" #f type="file" (change)="osmdLoadFiles($event.target.files)" />
 
       <ion-buttons slot="start">
         <ion-button disabled="{{running}}" (click)="f.click()">
@@ -93,6 +109,8 @@
         </ion-button>
       </ion-buttons>
 
+      <!-- <ion-title>midi.academy</ion-title> -->
+
       <ion-buttons slot="end">
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
@@ -101,18 +119,19 @@
 
   <ion-content [fullscreen]="false">
 
-    <div style="margin: 5%">
+    <div [style.backgroundColor] = "settings.backgroundColor" id="osmdContainer"></div>
+
+    <div *ngIf="!fileLoaded" style="margin: 3em">
+
+      <span style="position: fixed; margin-top: -2em">
       <ion-label *ngIf="fileLoadError" color="danger">
-        <strong>{{'errorFile'| translate}}</strong>
+        {{'errorFile'| translate}}
       </ion-label>
-    </div>
 
-    <div [style.backgroundColor] = "backgroundColor" id="osmdContainer"></div>
-
-    <div *ngIf="!fileLoaded" style="margin: 5%">
-      <ion-label *ngIf="!midiAvailable" color="danger">
+      <ion-label *ngIf="!midi.available" color="danger">
         {{'errorMidi'| translate}}
       </ion-label>
+      </span>
 
       <ion-card>
         <ion-card-header>
@@ -130,11 +149,10 @@
             </ion-item>
 
             <ion-item> 3. {{'instructions3'| translate}}</ion-item>
-
           </ion-list>
         </ion-card-content>
 
-        <ion-button fill="clear" (click)="osmdLoadURL('/assets/scores/October_Autumn_Song_from_Tchaikovskys_The_Seasons.mxl')">
+        <ion-button fill="clear" (click)="osmdLoadURL('/assets/scores/ctober_Autumn_Song_from_Tchaikovskys_The_Seasons.mxl')">
           October
         </ion-button>
         <ion-button fill="clear" (click)="osmdLoadURL('/assets/scores/Opus_27_No_2_Moonlight_Sonata_1st_movement.mxl')">
@@ -151,9 +169,9 @@
     </div>
   </ion-content>
 
-  <ion-footer>
+  <ion-footer *ngIf="settings.checkboxKeyboard">
     <ion-toolbar>
-      <app-keyboard *ngIf="checkboxKeyboard"></app-keyboard>
+      <app-keyboard ></app-keyboard>
     </ion-toolbar>
   </ion-footer>
 

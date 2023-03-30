@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Piano } from '@tonejs/piano';
 import { Cursor } from 'opensheetmusicdisplay';
 
 export type NoteObject = {
@@ -19,10 +20,28 @@ export class NotesService {
   // Initialize maps of notes comming from Music Sheet
   mapRequired = new Map<string, NoteObject>();
   mapPrevRequired = new Map<string, NoteObject>();
-  tempoInBPM: number;
+
+  piano: Piano;
+
+  keys: string[] = [];
+  keyStates: string[] = [];
+  keyFingers: string[] = [];
+
+  timePlayStart: number = 0;
+  autoplaySkip: number = 0;
+  tempoInBPM: number = 120;
+
 
   constructor() {
-    this.tempoInBPM = 120;
+    // create the piano and load 1 velocity steps to reduce memory consumption
+    this.piano = new Piano({
+      velocities: 1,
+    });
+    //connect it to the speaker output
+    this.piano.toDestination();
+
+    this.piano.load();
+
   }
 
   getMapRequired(): Map<string, NoteObject> {
@@ -151,5 +170,43 @@ export class NotesService {
         midiPress(parseInt(key) + 12, 60);
       }
     }
+  }
+
+  // Update note status for piano keyboard
+  updateNotesStatus(): void {
+    for (let i = 0; i < 88; i++) {
+      this.keyStates[i] = 'unpressed';
+      this.keyFingers[i] = '';
+    }
+    if (this.getMapRequired().size) {
+      for (const [key] of this.getMapPressed()) {
+        if (this.getMapRequired().has(key) && this.getMapPrevRequired().has(key)) {
+          this.keyStates[parseInt(key) - 9] = 'pressedkeep';
+        } else if (this.getMapRequired().has(key)) {
+          this.keyStates[parseInt(key) - 9] = 'pressed';
+        } else if (this.getMapPrevRequired().has(key)) {
+          this.keyStates[parseInt(key) - 9] = 'pressed';
+        } else {
+          this.keyStates[parseInt(key) - 9] = 'pressedwrong';
+        }
+      }
+      for (const [, value] of this.getMapRequired()) {
+        this.keyFingers[parseInt(value.key) - 9] = value.fingering;
+      }
+      for (const [key, value] of this.getMapRequired()) {
+        if (value.value === 0) {
+          if (this.keyStates[parseInt(key) - 9] == 'unpressed') {
+            this.keyStates[parseInt(key) - 9] = 'unpressedreq';
+          } else if ((this.getMapPressed().get(key) ?? -1) > 1) {
+            this.keyStates[parseInt(value.key) - 9] = 'pressedreq';
+          }
+        }
+      }
+    } else {
+      for (const [key] of this.getMapPressed()) {
+        this.keyStates[parseInt(key) - 9] = 'pressed';
+      }
+    }
+    //rvilarl this.changeRef.detectChanges();
   }
 }
