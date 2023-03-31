@@ -33,7 +33,10 @@ export class HomePageComponent implements OnInit {
     private osmdService: OsmdService,
     public changeRef: ChangeDetectorRef
   ) {
-    midi.onChange.subscribe(this.osmdCursorPlayMoveNext());
+    midi.onChange.subscribe(() => {
+      if (this.pianoKeyboard) this.notes.updateNotesStatus();
+      if (this.notes.checkRequired()) this.osmdCursorPlayMoveNext();
+    });
   }
 
   ngOnInit(): void {
@@ -235,13 +238,13 @@ export class HomePageComponent implements OnInit {
       if (index != 0) cursor.show();
       cursor.reset();
     });
-    // // Additional tasks in case of new start, not required in repetition
+    // TODO: Additional tasks in case of new start, not required in repetition
     // if (this.settings.repeat == this.settings.repeatCfg) {
-    //   this.notes.clear();
-    //   // free auto pressed notes
-    //   for (const [key] of this.midi.mapNotesAutoPressed) {
-    //     this.midi.releaseNote(parseInt(key) + 12);
-    //   }
+    this.notes.clear();
+    // free auto pressed notes
+    for (const [key] of this.midi.mapNotesAutoPressed) {
+      this.midi.releaseNote(parseInt(key) + 12);
+    }
     // }
 
     this.osmdService.hideFeedback();

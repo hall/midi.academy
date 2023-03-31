@@ -83,7 +83,6 @@ export class MidiService {
     this.initDev(access);
   }
 
-  // Press note on Ouput MIDI Device
   pressNote(pitch: number, velocity: number): void {
     this.mapNotesAutoPressed.set((pitch - 12).toFixed(), 1);
     const iter = this.outputs.values();
@@ -123,11 +122,7 @@ export class MidiService {
       this.osmd.textFeedback('❌', 0, 20);
     }
 
-    // TODO: if (this.homePageComponent.pianoKeyboard)
-    this.notes.updateNotesStatus();
-    if (this.notes.checkRequired())
-      // HomePageComponent.osmdCursorPlayMoveNext();
-      this.onChange.emit({});
+    this.onChange.emit();
   }
 
   // Midi input note released
@@ -136,11 +131,7 @@ export class MidiService {
     const name = halbTone.toFixed();
     this.notes.release(name);
 
-    // TODO: if (this.homePageComponent.pianoKeyboard)
-    this.notes.updateNotesStatus();
-    if (this.notes.checkRequired())
-      // HomePageComponent.osmdCursorPlayMoveNext();
-      this.onChange.emit({});
+    this.onChange.emit();
   }
 
   // Refresh wakelock for two minutes

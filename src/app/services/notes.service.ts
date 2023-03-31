@@ -17,7 +17,7 @@ export type NoteObject = {
 })
 export class NotesService {
   mapPressed: Map<string, number> = new Map();
-  // Initialize maps of notes comming from Music Sheet
+  // Initialize maps of notes coming from Music Sheet
   mapRequired = new Map<string, NoteObject>();
   mapPrevRequired = new Map<string, NoteObject>();
 
