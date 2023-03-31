@@ -108,7 +108,7 @@ export class HomePageComponent implements OnInit {
           4 *
           60000) /
         this.notes.tempoInBPM /
-        this.settings.speed;
+        (this.settings.speed / 100);
       setTimeout(() => {
         if (!this.osmdEndReached(0)) this.osmdService.textFeedback('🐢', 0, 40);
         this.osmd.cursors[1].hide();
@@ -122,7 +122,7 @@ export class HomePageComponent implements OnInit {
           4 *
           60000) /
         this.notes.tempoInBPM /
-        this.settings.speed;
+        (this.settings.speed / 100);
       setTimeout(() => {
         this.osmdCursorTempoMoveNext();
       }, timeout);
@@ -162,7 +162,7 @@ export class HomePageComponent implements OnInit {
           4 *
           60000) /
         this.notes.tempoInBPM /
-        this.settings.speed;
+        (this.settings.speed / 100);
       this.osmd.cursors[0].hide();
       setTimeout(() => {
         if (this.settings.repeat > 0) {
@@ -295,7 +295,7 @@ export class HomePageComponent implements OnInit {
         4 *
         60000) /
       this.notes.tempoInBPM /
-      this.settings.speed;
+      (this.settings.speed / 100);
     setTimeout(() => {
       this.osmdCursorTempoMoveNext();
     }, timeout);
