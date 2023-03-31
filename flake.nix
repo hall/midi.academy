@@ -4,7 +4,7 @@
     utils.url = "github:numtide/flake-utils";
   };
   outputs = inputs@{ self, ... }:
-    inputs.utils.lib.eachDefaultSystem (system:
+    inputs.utils.lib.eachSystem ["x86_64-linux"] (system:
       let pkgs = inputs.nixpkgs.legacyPackages.${system}; in
       {
         # formatter = pkgs.nodejs.pkgs.prettier; # TODO: write inplace
@@ -15,7 +15,7 @@
           pname = package.name;
           version = package.version;
           src = ./.;
-          npmDepsHash = "sha256-8txl04A36fbM7nMvRSX9X/o/FSOF6TyxXNSDnkiFx94=";
+          npmDepsHash = "sha256-sXfR5aKIKdsVKTp5TEdUkPapvYr3Lkli7y1c7f2cBBI=";
           nativeBuildInputs = [
             python310
             nodejs.pkgs.node-gyp-build
