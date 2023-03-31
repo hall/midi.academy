@@ -24,7 +24,7 @@ jobs:
 
       - name: build package
         run: |
-          nix build
+          nix build --print-build-logs
           # https://github.com/actions/deploy-pages/issues/58
           cp -rL --no-preserve=mode,ownership ./result www
 
