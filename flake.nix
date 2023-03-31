@@ -37,6 +37,9 @@
           shellHook = ''
             export PATH="$PATH:$PWD/node_modules/.bin"
           '';
+          buildInputs = [
+            chromium
+          ];
         };
       });
 }

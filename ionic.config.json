@@ -1,0 +1,7 @@
+{
+  "name": "midi.academy",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

@@ -26,6 +26,7 @@ npm-debug.log*
 /platforms
 /plugins
 /www
+/out
 
 .direnv/
 /result
