@@ -132,7 +132,7 @@ export class HomePageComponent implements OnInit {
       // Skip when ties only occurred
       if (this.notes.autoplaySkip > 0) {
         this.notes.autoplaySkip--;
-      } else this.notes.autoplayRequired(this.midi.pressNote.bind(this), this.midi.releaseNote.bind(this));
+      } else this.notes.autoplayRequired(this.midi.pressNote.bind(this.midi), this.midi.releaseNote.bind(this.midi));
     }
   }
 
@@ -286,7 +286,7 @@ export class HomePageComponent implements OnInit {
       // Skip when ties only occured
       if (this.notes.autoplaySkip > 0) {
         this.notes.autoplaySkip--;
-      } else this.notes.autoplayRequired(this.midi.pressNote.bind(this), this.midi.releaseNote.bind(this));
+      } else this.notes.autoplayRequired(this.midi.pressNote.bind(this.midi), this.midi.releaseNote.bind(this.midi));
     }
     const it2 = this.osmd.cursors[0].iterator.clone();
     it2.moveToNext();
