@@ -87,13 +87,17 @@
       </ion-item>
 
       <ion-item>
-        <ion-select interface="popover" [(ngModel)]="settings.language" (ionChange)="settings.useLanguage($event)">
+        <ion-select
+          label="Language"
+          interface="popover"
+          [(ngModel)]="settings.language"
+          (ionChange)="settings.useLanguage($event)"
+        >
           <ion-select-option value="gb">🇬🇧 gb</ion-select-option>
           <ion-select-option value="fr">🇫🇷 fr</ion-select-option>
           <ion-select-option value="de">🇩🇪 de</ion-select-option>
           <ion-select-option value="it">🇮🇹 it</ion-select-option>
           <ion-select-option value="es">🇪🇸 es</ion-select-option>
-          Language
         </ion-select>
       </ion-item>
 
