@@ -21,13 +21,28 @@ export class SettingsService {
   speed: number = 100;
   backgroundColor: string = '#ffffff';
 
-  constructor(public translate: TranslateService) {
-    this.translate.use(this.language);
+  constructor(public _translate: TranslateService) {
+    this._translate.use(this.language);
+
+    // initialize values if they were previously persisted
+    for (let p in this) {
+      if (p.startsWith('_')) continue;
+      let store = localStorage.getItem(p);
+      if (store !== null) this[p] = JSON.parse(store);
+    }
+  }
+
+  // save properties to local storage
+  persist() {
+    for (let p in this) {
+      if (p.startsWith('_')) continue;
+      localStorage.setItem(p, JSON.stringify(this[p]));
+    }
   }
 
   useLanguage(event: any): void {
     this.language = event.detail.value;
-    this.translate.use(event.detail.value);
+    this._translate.use(event.detail.value);
   }
 
   updateZoom(value: number, osmd: OpenSheetMusicDisplay): void {

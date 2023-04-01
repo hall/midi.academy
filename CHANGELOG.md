@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - toggle playback with space bar
+- persist settings in browser storage
 
 ## [0.1.1] - 2023-03-31
 

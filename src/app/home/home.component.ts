@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { IonContent } from '@ionic/angular';
 import { OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
 
@@ -31,7 +31,12 @@ export class HomePageComponent implements OnInit {
     if (event.key == ' ') {
       if (this.running) this.osmdCursorStop();
       else this.osmdPractice();
-    } else alert(JSON.stringify(event));
+    }
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  onUnload(): void {
+    this.settings.persist();
   }
 
   constructor(
