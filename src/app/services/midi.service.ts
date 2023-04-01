@@ -36,16 +36,15 @@ export class MidiService {
 
   // Register MIDI Inputs' handlers and outputs
   initDev(access: MIDIAccess): void {
-    const iterInputs = access.inputs.values();
-    const inputs = [];
-    for (let o = iterInputs.next(); !o.done; o = iterInputs.next()) {
-      if (!o.value.name?.includes('Midi Through')) inputs.push(o.value);
-    }
+    access.inputs.forEach((input) => {
+      if (!input.name?.includes('Midi Through')) this.inputs.push(input);
+    });
+
     this.device = 'none';
 
-    for (let port = 0; port < inputs.length; port++) {
-      this.device = inputs[port].name + ' (' + inputs[port].manufacturer + ')';
-      inputs[port].onmidimessage = (event: MIDIMessageEvent) => {
+    this.inputs.forEach((port) => {
+      this.device = `${port.name} (${port.manufacturer})`;
+      port.onmidimessage = (event: MIDIMessageEvent) => {
         const NOTE_ON = 9;
         const NOTE_OFF = 8;
         const cmd = event.data[0] >> 4;
@@ -60,16 +59,11 @@ export class MidiService {
           this.noteOn(event.timeStamp, pitch);
         }
       };
-    }
+    });
 
-    const iterOutputs = access.outputs.values();
-    const outputs = [];
-    for (let o = iterOutputs.next(); !o.done; o = iterOutputs.next()) {
-      if (!o.value.name?.includes('Midi Through')) outputs.push(o.value);
-    }
-
-    this.inputs = inputs;
-    this.outputs = outputs;
+    access.outputs.forEach((output) => {
+      if (!output.name?.includes('Midi Through')) this.outputs.push(output);
+    });
   }
 
   // Initialize MIDI event listeners
@@ -97,7 +91,7 @@ export class MidiService {
     }
   }
 
-  // Release note on Ouput MIDI Device
+  // Release note on Output MIDI Device
   releaseNote(pitch: number): void {
     this.mapNotesAutoPressed.delete((pitch - 12).toFixed());
     const iter = this.outputs.values();
@@ -113,8 +107,7 @@ export class MidiService {
   // Midi input note pressed
   noteOn(time: number, pitch: number /*, velocity: number*/): void {
     this.refreshWakeLock();
-    const halbTone = pitch - 12;
-    const name = halbTone.toFixed();
+    const name = (pitch - 12).toFixed();
     this.notes.press(name);
 
     // wrong key pressed
@@ -127,14 +120,13 @@ export class MidiService {
 
   // Midi input note released
   noteOff(time: number, pitch: number): void {
-    const halbTone = pitch - 12;
-    const name = halbTone.toFixed();
+    const name = (pitch - 12).toFixed();
     this.notes.release(name);
 
     this.onChange.emit();
   }
 
-  // Refresh wakelock for two minutes
+  // Refresh wake lock for two minutes
   refreshWakeLock(): void {
     if (navigator.wakeLock) {
       if (!this.wakeLockObj) {
@@ -143,9 +135,6 @@ export class MidiService {
           this.wakeLockObj.addEventListener('release', () => {
             this.wakeLockObj = undefined;
           });
-          //})
-          //.catch((err) => {
-          // console.log('wakelock failed to acquire: ' + err.message);
         });
       }
       // Maintain wake lock for 2 minutes

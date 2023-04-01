@@ -68,7 +68,7 @@ export class NotesService {
     this.mapPressed.delete(name);
   }
 
-  // Check that new notes have been pressed since the last succesful check (value===1)
+  // Check that new notes have been pressed since the last successful check (value===1)
   private checkRequiredNew(): boolean {
     for (const [, noteObj] of this.mapRequired) {
       if (noteObj.value === 0) {
@@ -86,7 +86,7 @@ export class NotesService {
   checkRequired(): boolean {
     // Check only new notes, hold notes with pedals would be to difficult
     if (this.checkRequiredNew() === true) {
-      // Check that no pressed key is unexpexted (red key)
+      // Check that no pressed key is unexpected (red key)
       for (const [key] of this.mapPressed) if (!this.mapRequired.has(key)) return false;
       // Mark all the notes as no longer new, go to next cycle
       for (const [key, value] of this.mapPressed) this.mapPressed.set(key, value + 1);
@@ -95,7 +95,7 @@ export class NotesService {
     return false;
   }
 
-  // Calculate required notes deleting outphased onces and keeping track of new notes
+  // Calculate required notes deleting ones out of phase and keeping track of new notes
   calculateRequired(cursor: Cursor, upperStave: boolean, lowerStave: boolean, back = false): void {
     // Get current source time stamp
     const timestamp = cursor.iterator.CurrentSourceTimestamp.RealValue;
@@ -172,31 +172,32 @@ export class NotesService {
 
   // Update note status for piano keyboard
   updateNotesStatus(): void {
-    for (let i = 0; i < 88; i++) {
-      this.keyStates[i] = 'unpressed';
-      this.keyFingers[i] = '';
-    }
+    this.keyStates = Array.from({ length: 88 }, () => 'unpressed');
+    this.keyFingers = Array.from({ length: 88 }, () => '');
+
     if (this.getMapRequired().size) {
       for (const [key] of this.getMapPressed()) {
+        let i = parseInt(key) - 9;
         if (this.getMapRequired().has(key) && this.getMapPrevRequired().has(key)) {
-          this.keyStates[parseInt(key) - 9] = 'pressedkeep';
+          this.keyStates[i] = 'keep';
         } else if (this.getMapRequired().has(key)) {
-          this.keyStates[parseInt(key) - 9] = 'pressed';
+          this.keyStates[i] = 'pressed';
         } else if (this.getMapPrevRequired().has(key)) {
-          this.keyStates[parseInt(key) - 9] = 'pressed';
+          this.keyStates[i] = 'pressed';
         } else {
-          this.keyStates[parseInt(key) - 9] = 'pressedwrong';
+          this.keyStates[i] = 'wrong';
         }
       }
       for (const [, value] of this.getMapRequired()) {
         this.keyFingers[parseInt(value.key) - 9] = value.fingering;
       }
       for (const [key, value] of this.getMapRequired()) {
+        let i = parseInt(key) - 9;
         if (value.value === 0) {
-          if (this.keyStates[parseInt(key) - 9] == 'unpressed') {
-            this.keyStates[parseInt(key) - 9] = 'unpressedreq';
+          if (this.keyStates[i] == 'unpressed') {
+            this.keyStates[i] = 'un_required';
           } else if ((this.getMapPressed().get(key) ?? -1) > 1) {
-            this.keyStates[parseInt(value.key) - 9] = 'pressedreq';
+            this.keyStates[parseInt(value.key) - 9] = 'required';
           }
         }
       }
@@ -205,6 +206,6 @@ export class NotesService {
         this.keyStates[parseInt(key) - 9] = 'pressed';
       }
     }
-    //rvilarl this.changeRef.detectChanges();
+    // this.changeRef.detectChanges();
   }
 }
