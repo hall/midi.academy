@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { IonContent } from '@ionic/angular';
 import { OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
 
@@ -25,6 +25,14 @@ export class HomePageComponent implements OnInit {
   fileLoadError: boolean = false;
   fileLoaded: boolean = false;
   isMobileLayout = false;
+
+  @HostListener('document:keypress', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.key == ' ') {
+      if (this.running) this.osmdCursorStop();
+      else this.osmdPractice();
+    } else alert(JSON.stringify(event));
+  }
 
   constructor(
     private notes: NotesService,
@@ -286,7 +294,7 @@ export class HomePageComponent implements OnInit {
     }
     // if required play
     if (this.settings.checkboxAutoplay) {
-      // Skip when ties only occured
+      // Skip when ties only occurred
       if (this.notes.autoplaySkip > 0) {
         this.notes.autoplaySkip--;
       } else this.notes.autoplayRequired(this.midi.pressNote.bind(this.midi), this.midi.releaseNote.bind(this.midi));
