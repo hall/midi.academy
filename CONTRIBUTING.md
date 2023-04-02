@@ -7,7 +7,7 @@ Thanks for your interest in contributing!
 
 Setup a local development environment (optionally/recommended, using only [nix](https://nixos.org/download.html#download-nix)).
 
-> **NOTE**: with vscode, run the "Debug" command through the Ionic extension.
+> **NOTE**: to debug with vscode, run `CTRL+SHIFT-B` then press `F5`
 
 ```
 nix develop
