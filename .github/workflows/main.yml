@@ -16,6 +16,24 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v3
 
+      - name: get latest tag
+        id: latest
+        uses: actions-ecosystem/action-get-latest-tag@v1
+
+      - name: parse changelog
+        id: changelog
+        uses: coditory/changelog-parser@v1
+
+      - name: get package version
+        id: package
+        uses: martinbeentjes/npm-get-version-action@main
+
+      - name: verify versions match
+        if: steps.changelog.outputs.version != steps.package.outputs.current-version
+        run: |
+          echo "version from package.json does not match that in CHANGELOG.md"
+          echo "::set-job-status conclusion=failure::"
+
       - name: install nix
         uses: cachix/install-nix-action@v18
 
@@ -27,14 +45,6 @@ jobs:
           nix build --print-build-logs
           # https://github.com/actions/deploy-pages/issues/58
           cp -rL --no-preserve=mode,ownership ./result www
-
-      - name: get latest tag
-        id: latest
-        uses: actions-ecosystem/action-get-latest-tag@v1
-
-      - name: parse changelog
-        id: changelog
-        uses: coditory/changelog-parser@v1
 
       - name: create release
         id: release
