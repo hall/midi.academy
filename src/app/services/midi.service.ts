@@ -104,14 +104,14 @@ export class MidiService {
     if (this.outputs.values().next().done) this.notes.piano.keyUp({ midi: pitch });
   }
 
-  // Midi input note pressed
+  // note pressed at time for pitch
   noteOn(time: number, pitch: number /*, velocity: number*/): void {
     this.refreshWakeLock();
-    const name = (pitch - 12).toFixed();
-    this.notes.press(name);
+    const name = pitch - 12;
+    this.notes.press(pitch - 12);
 
     // wrong key pressed
-    if (!this.notes.getMapRequired().has(name)) {
+    if (!this.notes.keys[name].required) {
       this.osmd.textFeedback('❌', 0, 20);
     }
 
@@ -120,8 +120,7 @@ export class MidiService {
 
   // Midi input note released
   noteOff(time: number, pitch: number): void {
-    const name = (pitch - 12).toFixed();
-    this.notes.release(name);
+    this.notes.release(pitch - 12);
 
     this.onChange.emit();
   }

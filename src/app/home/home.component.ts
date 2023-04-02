@@ -16,7 +16,7 @@ import { version } from '../../../package.json';
 })
 export class HomePageComponent implements OnInit {
   @ViewChild(IonContent, { static: false }) content!: IonContent;
-  @ViewChild(PianoKeyboardComponent) public pianoKeyboard?: PianoKeyboardComponent;
+  @ViewChild(PianoKeyboardComponent) public keyboard?: PianoKeyboardComponent;
   osmd!: OpenSheetMusicDisplay;
 
   public version = version;
@@ -25,6 +25,8 @@ export class HomePageComponent implements OnInit {
   fileLoadError: boolean = false;
   fileLoaded: boolean = false;
   isMobileLayout = false;
+
+  autoplaySkip: number = 0;
 
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -47,7 +49,6 @@ export class HomePageComponent implements OnInit {
     public changeRef: ChangeDetectorRef
   ) {
     midi.onChange.subscribe(() => {
-      if (this.pianoKeyboard) this.notes.updateNotesStatus();
       if (this.notes.checkRequired()) this.osmdCursorPlayMoveNext();
     });
   }
@@ -146,9 +147,9 @@ export class HomePageComponent implements OnInit {
     // If auto play, then play notes
     if (this.settings.checkboxAutoplay) {
       // Skip when ties only occurred
-      if (this.notes.autoplaySkip > 0) {
-        this.notes.autoplaySkip--;
-      } else this.notes.autoplayRequired(this.midi.pressNote.bind(this.midi), this.midi.releaseNote.bind(this.midi));
+      if (this.autoplaySkip > 0) {
+        this.autoplaySkip--;
+      } else this.notes.autoplay(this.midi.pressNote.bind(this.midi), this.midi.releaseNote.bind(this.midi));
     }
   }
 
@@ -196,12 +197,10 @@ export class HomePageComponent implements OnInit {
     // Calculate notes
     this.notes.calculateRequired(this.osmd.cursors[0], this.settings.checkboxStaveUp, this.settings.checkboxStaveDown);
     this.notes.tempoInBPM = this.notes.tempoInBPM;
-    // Update keyboard
-    if (this.pianoKeyboard) this.notes.updateNotesStatus();
 
     // If ties only move to next ans skip one additional autoplay
     if (this.notes.checkRequired()) {
-      this.notes.autoplaySkip++;
+      this.autoplaySkip++;
       this.osmdCursorPlayMoveNext();
     }
   }
@@ -218,7 +217,6 @@ export class HomePageComponent implements OnInit {
     for (const [key] of this.midi.mapNotesAutoPressed) {
       this.midi.releaseNote(parseInt(key) + 12);
     }
-    if (this.pianoKeyboard) this.notes.updateNotesStatus();
   }
 
   // Reset selection on measures and set the cursor to the origin
@@ -232,7 +230,7 @@ export class HomePageComponent implements OnInit {
 
   osmdPlay(autoplay = true, flashCount = 0): void {
     this.running = true;
-    this.notes.autoplaySkip = 0;
+    this.autoplaySkip = 0;
     this.osmdService.resetFeedback();
     this.settings.checkboxAutoplay = autoplay;
     this.startFlashCount = flashCount;
@@ -273,9 +271,6 @@ export class HomePageComponent implements OnInit {
       this.settings.checkboxStaveDown,
       true
     );
-    this.notes.tempoInBPM = this.notes.tempoInBPM;
-    // Update keyboard
-    if (this.pianoKeyboard) this.notes.updateNotesStatus();
     this.osmdCursorStart2();
   }
 
@@ -294,15 +289,15 @@ export class HomePageComponent implements OnInit {
     this.notes.timePlayStart = Date.now();
     // Skip initial rests
     if (this.notes.checkRequired()) {
-      this.notes.autoplaySkip++;
+      this.autoplaySkip++;
       this.osmdCursorPlayMoveNext();
     }
     // if required play
     if (this.settings.checkboxAutoplay) {
       // Skip when ties only occurred
-      if (this.notes.autoplaySkip > 0) {
-        this.notes.autoplaySkip--;
-      } else this.notes.autoplayRequired(this.midi.pressNote.bind(this.midi), this.midi.releaseNote.bind(this.midi));
+      if (this.autoplaySkip > 0) {
+        this.autoplaySkip--;
+      } else this.notes.autoplay(this.midi.pressNote.bind(this.midi), this.midi.releaseNote.bind(this.midi));
     }
     const it2 = this.osmd.cursors[0].iterator.clone();
     it2.moveToNext();

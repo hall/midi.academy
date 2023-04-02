@@ -1,3 +1,11 @@
 <ul class="set">
-  <li *ngFor="let key of notes.keys;let i = index" class="{{key}} {{notes.keyStates[i]}}">{{notes.keyFingers[i]}}</li>
+  <li
+    *ngFor="let key of notes.keys"
+    class="{{ key.note }} 
+    {{ key.pressed ? 'pressed' : 'unpressed' }} 
+    {{ key.required ? 'required' : 'unrequired' }}
+    {{ key.pressed && !key.required ? 'incorrect' : '' }}"
+  >
+    {{ key.finger }}
+  </li>
 </ul>
