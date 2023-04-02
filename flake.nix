@@ -39,6 +39,7 @@
           '';
           buildInputs = [
             chromium
+            vkeybd
           ];
         };
       });
