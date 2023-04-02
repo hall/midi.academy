@@ -5,7 +5,7 @@
   "author": "",
   "homepage": "https://midi.academy",
   "scripts": {
-    "start": "ng serve",
+    "start": "ionic serve --external --no-open",
     "build": "ng build --configuration production",
     "test": "ng test",
     "lint": "ng lint",
