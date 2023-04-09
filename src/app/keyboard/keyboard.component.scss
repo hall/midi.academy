@@ -1,21 +1,23 @@
+@mixin color($color) {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, $color 100%);
+}
+
+$offset: -0.48%;
+$radius: 3px;
+
 .a,
 .b,
 .d,
 .e,
 .g {
-  margin: 0 0 0 -0.48%;
+  margin: 0 0 0 $offset;
 }
 
 ul {
-  height: 9em;
-  width: 100%;
-  margin: 0 auto;
-  padding: 1em 0 0 1em;
-  position: relative;
-  border: 1px solid #160801;
-  border-radius: 1em;
-  background: linear-gradient(45deg, #222 0%, #555 100%);
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5) inset, 0 1px rgba(212, 152, 125, 0.2) inset, 0 5px 15px rgba(0, 0, 0, 0.5);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  border-top: var(--border-width) var(--border-style) var(--border-color);
 }
 
 li {
@@ -24,6 +26,7 @@ li {
   list-style: none;
   position: relative;
   float: left;
+  text-align: center;
 
   &:first-child {
     border-radius: 5px 0 5px 5px;
@@ -33,107 +36,39 @@ li {
     border-radius: 0 5px 5px 5px;
   }
 
+  &.pressed {
+    @include color(#33e02f);
+  }
+
+  &:not(.pressed).required {
+    @include color(#bbb);
+  }
+
+  &.pressed:not(.required) {
+    @include color(#f32020);
+  }
+
   &:not([class*='S']) {
-    height: 8em;
-    width: 1.92%;
+    height: 9em;
+    width: 1.95%;
     z-index: 1;
-    text-align: center;
     line-height: 14em;
-    color: black;
+    background-color: ivory;
 
-    &.unpressed {
-      border-left: 1px solid #bbb;
-      border-bottom: 1px solid #bbb;
-      border-radius: 0 0 5px 5px;
-      box-shadow: -1px 0 0 rgba(255, 255, 255, 0.8) inset, 0 0 5px #ccc inset, 0 0 3px rgba(0, 0, 0, 0.2);
-      background: linear-gradient(to bottom, #eee 0%, #fff 100%);
-    }
-    &.keep {
-      border-top: 1px solid #777;
-      border-left: 1px solid #999;
-      border-bottom: 1px solid #999;
-      box-shadow: 2px 0 3px rgba(0, 0, 0, 0.1) inset, -5px 5px 20px rgba(0, 0, 0, 0.2) inset, 0 0 3px rgba(0, 0, 0, 0.2);
-      background: linear-gradient(to bottom, #ffffff 0%, #00a0e9 100%);
-    }
-
-    &.pressed {
-      border-top: 1px solid #777;
-      border-left: 1px solid #999;
-      border-bottom: 1px solid #999;
-      box-shadow: 2px 0 3px rgba(0, 0, 0, 0.1) inset, -5px 5px 20px rgba(0, 0, 0, 0.2) inset, 0 0 3px rgba(0, 0, 0, 0.2);
-      background: linear-gradient(to bottom, #ffffff 0%, #33e02f 100%);
-    }
-
-    &.required {
-      border-top: 1px solid #777;
-      border-left: 1px solid #999;
-      border-bottom: 1px solid #999;
-      box-shadow: 2px 0 3px rgba(0, 0, 0, 0.1) inset, -5px 5px 20px rgba(0, 0, 0, 0.2) inset, 0 0 3px rgba(0, 0, 0, 0.2);
-      background: linear-gradient(to bottom, #ffffff 0%, #33e02f 50%, #bbb 100%);
-    }
-
-    &.incorrect {
-      border-top: 1px solid #777;
-      border-left: 1px solid #999;
-      border-bottom: 1px solid #999;
-      box-shadow: 2px 0 3px rgba(0, 0, 0, 0.1) inset, -5px 5px 20px rgba(0, 0, 0, 0.2) inset, 0 0 3px rgba(0, 0, 0, 0.2);
-      background: linear-gradient(to bottom, #ffffff 0%, #f32020 100%);
-    }
-
-    &.unpressed.required {
-      border-top: 1px solid #777;
-      border-left: 1px solid #999;
-      border-bottom: 1px solid #999;
-      box-shadow: 2px 0 3px rgba(0, 0, 0, 0.1) inset, -5px 5px 20px rgba(0, 0, 0, 0.2) inset, 0 0 3px rgba(0, 0, 0, 0.2);
-      background: linear-gradient(to bottom, #ffffff 0%, #bbb 100%);
-    }
+    border: 1px solid #bbb;
+    border-radius: 0 0 $radius $radius;
   }
 
   &[class*='S'] {
-    height: 4em;
+    height: 5em;
     width: 0.96%;
-    margin: 0 0 0 -0.48%;
     z-index: 2;
-    border: 1px solid #000;
-    border-radius: 0 0 3px 3px;
-    text-align: center;
     line-height: 6em;
-    color: white;
+    background-color: #333;
 
-    &.unpressed {
-      box-shadow: -1px -1px 2px rgba(255, 255, 255, 0.2) inset, 0 -5px 2px 3px rgba(0, 0, 0, 0.6) inset,
-        0 2px 4px rgba(0, 0, 0, 0.5);
-      background: linear-gradient(45deg, #222 0%, #555 100%);
-    }
+    border: 1px solid #000;
+    border-radius: 0 0 $radius $radius;
 
-    &.keep {
-      box-shadow: -1px -1px 2px rgba(255, 255, 255, 0.2) inset, 0 -2px 2px 3px rgba(0, 0, 0, 0.6) inset,
-        0 1px 2px rgba(0, 0, 0, 0.5);
-      background: linear-gradient(to bottom, #000000 0%, #00a0f0 50%, #00a0f0 100%);
-    }
-
-    &.pressed {
-      box-shadow: -1px -1px 2px rgba(255, 255, 255, 0.2) inset, 0 -2px 2px 3px rgba(0, 0, 0, 0.6) inset,
-        0 1px 2px rgba(0, 0, 0, 0.5);
-      background: linear-gradient(to bottom, #000000 0%, #33e02f 50%, #33e02f 100%);
-    }
-
-    &.required {
-      box-shadow: -1px -1px 2px rgba(255, 255, 255, 0.2) inset, 0 -2px 2px 3px rgba(0, 0, 0, 0.6) inset,
-        0 1px 2px rgba(0, 0, 0, 0.5);
-      background: linear-gradient(to bottom, #000000 0%, #33a02f 50%, #bbb 100%);
-    }
-
-    &.wrong {
-      box-shadow: -1px -1px 2px rgba(255, 255, 255, 0.2) inset, 0 -2px 2px 3px rgba(0, 0, 0, 0.6) inset,
-        0 1px 2px rgba(0, 0, 0, 0.5);
-      background: linear-gradient(to bottom, #000000 0%, #f34040 50%, #f34040 100%);
-    }
-
-    &.unpressed.required {
-      box-shadow: -1px -1px 2px rgba(255, 255, 255, 0.2) inset, 0 -2px 2px 3px rgba(0, 0, 0, 0.6) inset,
-        0 1px 2px rgba(0, 0, 0, 0.5);
-      background: linear-gradient(to bottom, #000000 0%, #bbb 50%, #bbb 100%);
-    }
+    margin: 0 0 0 $offset;
   }
 }

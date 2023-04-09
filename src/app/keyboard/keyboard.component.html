@@ -1,10 +1,9 @@
-<ul class="set">
+<ul>
   <li
     *ngFor="let key of notes.keys"
-    class="{{ key.note }} 
-    {{ key.pressed ? 'pressed' : 'unpressed' }} 
-    {{ key.required ? 'required' : 'unrequired' }}
-    {{ key.pressed && !key.required ? 'incorrect' : '' }}"
+    class="{{ key.note }}"
+    [class.pressed]="key.pressed"
+    [class.required]="key.required"
   >
     {{ key.finger }}
   </li>
