@@ -11,7 +11,6 @@ export class SettingsService {
   // Music Sheet GUI
   checkboxStaveUp: boolean = true;
   checkboxStaveDown: boolean = true;
-  checkboxAutoplay: boolean = false;
   checkboxColor: boolean = false;
   checkboxKeyboard: boolean = false;
   startMeasure = 0;

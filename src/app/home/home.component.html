@@ -65,10 +65,12 @@
       </ion-item-divider>
 
       <ion-item>
-        <ion-checkbox disabled="{{ running }}" [(ngModel)]="settings.checkboxStaveUp">Upper Staff</ion-checkbox>
+        <ion-checkbox disabled="{{ cursor.running }}" [(ngModel)]="settings.checkboxStaveUp">Upper Staff</ion-checkbox>
       </ion-item>
       <ion-item>
-        <ion-checkbox disabled="{{ running }}" [(ngModel)]="settings.checkboxStaveDown">Lower Staff</ion-checkbox>
+        <ion-checkbox disabled="{{ cursor.running }}" [(ngModel)]="settings.checkboxStaveDown"
+          >Lower Staff</ion-checkbox
+        >
       </ion-item>
 
       <ion-item>
@@ -76,14 +78,10 @@
       </ion-item>
 
       <ion-item>
-        <ion-toggle (ionChange)="settings.updateColor($event.detail.checked, osmd)" disabled="{{ running }}">
-          {{ 'color' | translate }}
-        </ion-toggle>
-      </ion-item>
-
-      <ion-item>
         <ion-label position="fill">Background</ion-label>
-        <ion-item><input type="color" [(ngModel)]="settings.backgroundColor" disabled="{{ running }}" /></ion-item>
+        <ion-item
+          ><input type="color" [(ngModel)]="settings.backgroundColor" disabled="{{ cursor.running }}"
+        /></ion-item>
       </ion-item>
 
       <ion-item>
@@ -117,22 +115,22 @@
   </ion-content>
 </ion-menu>
 
-<input class="ion-hide" #f type="file" (change)="osmdLoadFiles($event.target.files)" />
+<input class="ion-hide" #f type="file" (change)="loadFiles($event.target.files)" />
 
 <div class="ion-page" id="main-content">
   <ion-header>
     <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-button disabled="{{ running }}" (click)="f.click()">
+        <ion-button disabled="{{ cursor.running }}" (click)="f.click()">
           <ion-icon size="large" name="folder-open-outline"></ion-icon>
         </ion-button>
-        <ion-button disabled="{{ !fileLoaded || running }}" (click)="osmdPractice()">
+        <ion-button disabled="{{ !fileLoaded || cursor.running }}" (click)="play(false)">
           <ion-icon size="large" name="play-outline"></ion-icon>
         </ion-button>
-        <ion-button disabled="{{ !fileLoaded || running }}" (click)="osmdPlay()">
+        <ion-button disabled="{{ !fileLoaded || cursor.running }}" (click)="play()">
           <ion-icon size="large" name="volume-medium-outline"></ion-icon>
         </ion-button>
-        <ion-button disabled="{{ !running }}" (click)="osmdCursorStop()">
+        <ion-button disabled="{{ !cursor.running }}" (click)="cursor.stop(osmd.cursor)">
           <ion-icon size="large" name="stop-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
@@ -178,12 +176,12 @@
           </ion-list>
         </ion-card-content>
 
-        <ion-button fill="clear" (click)="osmdLoadURL('/assets/scores/October.mxl')">October</ion-button>
-        <ion-button fill="clear" (click)="osmdLoadURL('/assets/scores/Moonlight-Sonata-1st-movement.mxl')">
+        <ion-button fill="clear" (click)="loadURL('/assets/scores/October.mxl')">October</ion-button>
+        <ion-button fill="clear" (click)="loadURL('/assets/scores/Moonlight-Sonata-1st-movement.mxl')">
           Moonlight Sonata
         </ion-button>
-        <ion-button fill="clear" (click)="osmdLoadURL('/assets/scores/Passacaglia.mxl')">Passacaglia</ion-button>
-        <ion-button fill="clear" (click)="osmdLoadURL('/assets/scores/Prelude-in-E-Minor.mxl')">
+        <ion-button fill="clear" (click)="loadURL('/assets/scores/Passacaglia.mxl')">Passacaglia</ion-button>
+        <ion-button fill="clear" (click)="loadURL('/assets/scores/Prelude-in-E-Minor.mxl')">
           Prelude in E Minor
         </ion-button>
       </ion-card>
