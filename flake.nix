@@ -41,6 +41,7 @@
             chromium
             vkeybd
           ];
+          CHROME_BIN="${chromium}/bin/chromium";
         };
       });
 }
