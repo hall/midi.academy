@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Piano } from '@tonejs/piano';
 import { Cursor } from 'opensheetmusicdisplay';
+import { MIDIOffset } from './midi.service';
 
 // enum of possible note names
 export enum NoteName {
@@ -160,7 +161,8 @@ export class NotesService {
         this.tempoInBPM = note.SourceMeasure.TempoInBPM;
         if ((note.ParentStaff.Id === 1 && upperStave == true) || (note.ParentStaff.Id === 2 && lowerStave == true)) {
           if (note.isRest() === false) {
-            let key = this.keys[note.halfTone];
+            // TODO: not sure why the halfTone is 9 off
+            let key = this.keys[note.halfTone - 9];
             key.timestamp = timestamp + note.Length.RealValue;
             key.staffId = note.ParentStaff.Id;
             key.voice = voice.ParentVoice.VoiceId;
@@ -185,7 +187,7 @@ export class NotesService {
     // release notes which are no longer required
     this.keys.forEach((key, index) => {
       if (key.pressed && !key.required) {
-        midiRelease(index + 12);
+        midiRelease(index + MIDIOffset);
       }
     });
 
@@ -193,8 +195,8 @@ export class NotesService {
     this.keys.forEach((key, index) => {
       if (key.required && key.requiredVal === 0) {
         // If already pressed, release first
-        if (key.pressed) midiRelease(index + 12);
-        midiPress(index + 12, 60);
+        if (key.pressed) midiRelease(index + MIDIOffset);
+        midiPress(index + MIDIOffset, 60);
       }
     });
   }

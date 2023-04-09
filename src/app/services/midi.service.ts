@@ -8,6 +8,10 @@ import MIDIMessageEvent = WebMidi.MIDIMessageEvent;
 import MIDIInput = WebMidi.MIDIInput;
 import MIDIOutput = WebMidi.MIDIOutput;
 
+// the first note on a piano keyboard, A0, is 21
+// TODO: un-hardcode the piano keyboard assumption
+export const MIDIOffset = 21;
+
 @Injectable({
   providedIn: 'root',
 })
@@ -78,10 +82,10 @@ export class MidiService {
   }
 
   pressNote(pitch: number, velocity: number): void {
-    this.mapNotesAutoPressed.set((pitch - 12).toFixed(), 1);
+    this.mapNotesAutoPressed.set(pitch.toFixed(), 1);
     const iter = this.outputs.values();
-    for (let o = iter.next(); !o.done; o = iter.next()) {
-      o.value.send([0x90, pitch, velocity], window.performance.now());
+    for (let output = iter.next(); !output.done; output = iter.next()) {
+      output.value.send([0x90, pitch, velocity], window.performance.now());
     }
     setTimeout(() => {
       this.noteOn(Date.now() - this.notes.timePlayStart, pitch);
@@ -93,7 +97,7 @@ export class MidiService {
 
   // Release note on Output MIDI Device
   releaseNote(pitch: number): void {
-    this.mapNotesAutoPressed.delete((pitch - 12).toFixed());
+    this.mapNotesAutoPressed.delete(pitch.toFixed());
     const iter = this.outputs.values();
     for (let o = iter.next(); !o.done; o = iter.next()) {
       o.value.send([0x80, pitch, 0x00], window.performance.now());
@@ -107,8 +111,8 @@ export class MidiService {
   // note pressed at time for pitch
   noteOn(time: number, pitch: number /*, velocity: number*/): void {
     this.refreshWakeLock();
-    const name = pitch - 12;
-    this.notes.press(pitch - 12);
+    const name = pitch - MIDIOffset;
+    this.notes.press(name);
 
     // wrong key pressed
     if (!this.notes.keys[name].required) {
@@ -120,8 +124,7 @@ export class MidiService {
 
   // Midi input note released
   noteOff(time: number, pitch: number): void {
-    this.notes.release(pitch - 12);
-
+    this.notes.release(pitch - MIDIOffset);
     this.onChange.emit();
   }
 
