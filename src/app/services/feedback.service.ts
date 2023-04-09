@@ -4,10 +4,10 @@ import { SettingsService } from './settings.service';
 @Injectable({
   providedIn: 'root',
 })
-export class OsmdService {
+export class FeedbackService {
   constructor(private settings: SettingsService) {}
 
-  resetFeedback(): void {
+  reset(): void {
     let elems = document.getElementsByClassName('feedback');
     // Remove all elements
     while (elems.length > 0) {
@@ -19,20 +19,20 @@ export class OsmdService {
     }
   }
 
-  hideFeedback(): void {
+  hide(): void {
     document.querySelectorAll<HTMLElement>('.feedback').forEach(function (el) {
       el.style.visibility = 'hidden';
     });
   }
 
-  showFeedback(): void {
+  show(): void {
     document.querySelectorAll<HTMLElement>('.feedback').forEach(function (el) {
       el.style.visibility = 'visible';
     });
   }
 
   // Present feedback text at cursor location
-  textFeedback(text: string, x: number, y: number): void {
+  addText(text: string, x: number, y: number): void {
     const id =
       (document.getElementById('cursorImg-0')?.style.top ?? '') +
       x +

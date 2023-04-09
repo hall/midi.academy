@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { OsmdService } from './osmd.service';
+import { FeedbackService } from './feedback.service';
 
 describe('OsmdService', () => {
-  let service: OsmdService;
+  let service: FeedbackService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(OsmdService);
+    service = TestBed.inject(FeedbackService);
   });
 
   it('should be created', () => {

@@ -6,7 +6,7 @@ import { NotesService } from '../services/notes.service';
 import { MidiService } from '../services/midi.service';
 import { PianoKeyboardComponent } from '../keyboard/keyboard.component';
 import { SettingsService } from '../services/settings.service';
-import { OsmdService } from '../services/osmd.service';
+import { FeedbackService } from '../services/feedback.service';
 import { version } from '../../../package.json';
 
 @Component({
@@ -45,7 +45,7 @@ export class HomePageComponent implements OnInit {
     private notes: NotesService,
     public midi: MidiService,
     public settings: SettingsService,
-    private osmdService: OsmdService,
+    private feedback: FeedbackService,
     public changeRef: ChangeDetectorRef
   ) {
     midi.onChange.subscribe(() => {

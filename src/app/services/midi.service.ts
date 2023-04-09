@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { NotesService } from './notes.service';
-import { OsmdService } from './osmd.service';
+import { FeedbackService } from './feedback.service';
 
 import MIDIAccess = WebMidi.MIDIAccess;
 import MIDIConnectionEvent = WebMidi.MIDIConnectionEvent;
@@ -27,7 +27,7 @@ export class MidiService {
   wakeLockObj?: WakeLockSentinel;
   wakeLockTimer?: number;
 
-  constructor(private notes: NotesService, private osmd: OsmdService) {
+  constructor(private notes: NotesService, private feedback: FeedbackService) {
     // Initialize MIDI
     navigator.requestMIDIAccess?.({ sysex: true }).then(this.success.bind(this), () => {
       this.available = false;
@@ -112,7 +112,7 @@ export class MidiService {
 
     // wrong key pressed
     if (!this.notes.keys[name].required) {
-      this.osmd.textFeedback('❌', 0, 20);
+      this.feedback.addText('❌', 0, 20);
     }
 
     this.onChange.emit();
