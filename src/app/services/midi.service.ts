@@ -77,6 +77,12 @@ export class MidiService {
     // wrong key pressed
     if (this.cursor.running && !this.notes.keys[name].required) {
       // this.feedback.addText('❌', 0, 20);
+
+      // switch to different bank for audio feedback
+      this.output?.send([0xc0, 6]);
+      // play the same note
+      // TODO: replace input note instead of adding a new note
+      this.output?.send([0x90, pitch, velocity]);
     }
 
     this.onChange.emit();
@@ -85,8 +91,14 @@ export class MidiService {
 
   // input note released
   noteOff(time: number, pitch: number): void {
-    this.notes.release(pitch - MIDIOffset);
+    const name = pitch - MIDIOffset;
+    this.notes.release(name);
     this.onChange.emit();
+
+    // if this is an injected wrong note, release it
+    if (this.cursor.running && !this.notes.keys[name].required) {
+      this.output?.send([0x80, pitch, 0x40]);
+    }
   }
 
   pressNote(pitch: number, velocity: number): void {
