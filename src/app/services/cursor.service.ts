@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Cursor } from 'opensheetmusicdisplay';
-import { MidiService } from './midi.service';
 import { NotesService } from './notes.service';
 import { FeedbackService } from './feedback.service';
 import { SettingsService } from './settings.service';
@@ -13,12 +12,7 @@ export class CursorService {
   autoplaySkip: number = 0;
   autoplay: boolean = false;
 
-  constructor(
-    public settings: SettingsService,
-    public feedback: FeedbackService,
-    public midi: MidiService,
-    public notes: NotesService
-  ) {}
+  constructor(public settings: SettingsService, public feedback: FeedbackService, public notes: NotesService) {}
 
   // reset the cursor to the first note
   start(cursor: Cursor, autoplay = false): void {
@@ -33,9 +27,6 @@ export class CursorService {
     // if (this.settings.repeat == this.settings.repeatCfg) {
     this.notes.clear();
     // free auto pressed notes
-    for (const [key] of this.midi.mapNotesAutoPressed) {
-      this.midi.releaseNote(parseInt(key));
-    }
     // }
 
     this.feedback.hide();
@@ -61,7 +52,7 @@ export class CursorService {
       if (this.autoplaySkip > 0) {
         this.autoplaySkip--;
       } else {
-        this.notes.autoplay(this.midi.pressNote.bind(this.midi), this.midi.releaseNote.bind(this.midi));
+        this.notes.autoplay();
       }
     }
 
@@ -84,9 +75,6 @@ export class CursorService {
     this.feedback.show();
     this.running = false;
     this.notes.clear();
-    for (const [key] of this.midi.mapNotesAutoPressed) {
-      this.midi.releaseNote(parseInt(key));
-    }
   }
 
   // move cursor to next note(s)
@@ -138,7 +126,7 @@ export class CursorService {
       // if there are only tie notes, skip this cycle
       if (this.autoplaySkip > 0) {
         this.autoplaySkip--;
-      } else this.notes.autoplay(this.midi.pressNote.bind(this.midi), this.midi.releaseNote.bind(this.midi));
+      } else this.notes.autoplay();
     }
   }
 
