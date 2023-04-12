@@ -1,5 +1,6 @@
 @mixin color($color) {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, $color 100%);
+  background: $color;
+  opacity: 0.6;
 }
 
 $offset: -0.48%;
@@ -36,12 +37,12 @@ li {
     border-radius: 0 5px 5px 5px;
   }
 
-  &.pressed {
-    @include color(#33e02f);
+  &.pressed.required {
+    @include color(#bbb);
   }
 
   &:not(.pressed).required {
-    @include color(#bbb);
+    @include color(#33e02f);
   }
 
   &.pressed:not(.required) {
@@ -49,7 +50,7 @@ li {
   }
 
   &:not([class*='S']) {
-    height: 9em;
+    height: 10em;
     width: 1.95%;
     z-index: 1;
     line-height: 14em;
@@ -60,7 +61,7 @@ li {
   }
 
   &[class*='S'] {
-    height: 5em;
+    height: 6em;
     width: 0.96%;
     z-index: 2;
     line-height: 6em;
