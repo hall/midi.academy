@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.3] - 2023-04-11
+
+### Changed
+
+- play a different sound (harpsichord) on wrong notes
+- use only a single cursor
+- swap keyboard key colors to draw attention to keys which require action
+  - required is now green
+  - pressed is now grey
+- remove boomwhacker colors toggle
+
 ## [0.1.2] - 2023-03-31
 
 ### Added
