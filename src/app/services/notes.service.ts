@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { Piano } from '@tonejs/piano';
 import { Cursor } from 'opensheetmusicdisplay';
-import { MIDIOffset } from './midi.service';
+import { MIDIOffset, MidiService } from './midi.service';
 
 // enum of possible note names
 export enum NoteName {
@@ -56,7 +56,12 @@ export class NotesService {
   timePlayStart: number = 0;
   tempoInBPM: number = 120;
 
-  constructor() {
+  private midi!: MidiService;
+
+  constructor(injector: Injector) {
+    // done this way to prevent circular dependency
+    setTimeout(() => (this.midi = injector.get(MidiService)));
+
     this.keys = Array.from({ length: 88 }, (e, i) => {
       return {
         pressed: false,
@@ -183,11 +188,11 @@ export class NotesService {
   }
 
   // automatically play the correct notes (e.g., for playback without interaction)
-  autoplay(midiPress: (note: number, velocity: number) => void, midiRelease: (note: number) => void): void {
+  autoplay(): void {
     // release notes which are no longer required
     this.keys.forEach((key, index) => {
       if (key.pressed && !key.required) {
-        midiRelease(index + MIDIOffset);
+        this.midi.releaseNote(index + MIDIOffset);
       }
     });
 
@@ -195,8 +200,8 @@ export class NotesService {
     this.keys.forEach((key, index) => {
       if (key.required && key.requiredVal === 0) {
         // If already pressed, release first
-        if (key.pressed) midiRelease(index + MIDIOffset);
-        midiPress(index + MIDIOffset, 60);
+        if (key.pressed) this.midi.releaseNote(index + MIDIOffset);
+        this.midi.pressNote(index + MIDIOffset, 60);
       }
     });
   }
