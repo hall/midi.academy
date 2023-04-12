@@ -69,13 +69,14 @@ export class HomePageComponent implements OnInit {
 
   // load selected file(s) from user's device
   loadFiles(files: Blob[]): void {
-    const reader = new FileReader();
-    reader.onload = (event: ProgressEvent<FileReader>) => {
-      this.loadURL(event.target?.result?.toString() ?? '');
-    };
-    files.forEach((file) => {
-      reader.readAsBinaryString(file);
-    });
+    for (let i = 0; i < files.length; i++) {
+      const reader = new FileReader();
+      reader.onload = (event: ProgressEvent<FileReader>) => {
+        this.loadURL(event.target?.result?.toString() ?? '');
+      };
+
+      reader.readAsBinaryString(files[i]);
+    }
   }
 
   // load remote URL
