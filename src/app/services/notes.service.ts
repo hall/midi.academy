@@ -58,6 +58,11 @@ export class NotesService {
 
   private midi!: MidiService;
 
+  // must be initialized after prompting the user
+  port!: SerialPort;
+  encoder!: TextEncoder;
+  writer!: WritableStreamDefaultWriter;
+
   constructor(injector: Injector) {
     // done this way to prevent circular dependency
     setTimeout(() => (this.midi = injector.get(MidiService)));
@@ -83,6 +88,21 @@ export class NotesService {
     this.piano.load();
   }
 
+  // connect to a serial port for LED control
+  async connect() {
+    this.port = await navigator.serial.requestPort();
+    await this.port.open({ baudRate: 9600 });
+
+    this.encoder = new TextEncoder();
+    this.writer = this.port.writable.getWriter();
+    // writer.releaseLock();
+  }
+
+  // write number to serial output
+  async serialWrite(note: number) {
+    await this.writer.write(this.encoder.encode(note.toString() + '\n'));
+  }
+
   clear(): void {
     this.keys.forEach((key) => {
       key.pressed = false;
@@ -91,6 +111,7 @@ export class NotesService {
       key.required = false;
       key.requiredVal = 0;
     });
+    this.serialWrite(88);
   }
 
   press(name: number): void {
@@ -157,6 +178,7 @@ export class NotesService {
         if (back || timestamp >= key.timestamp) {
           key.required = false;
           key.requiredVal = 0;
+          this.serialWrite(this.keys.indexOf(key));
         }
       });
 
@@ -174,6 +196,7 @@ export class NotesService {
             key.finger = note.Fingering ? note.Fingering.value : '';
             key.grace = note.IsGraceNote;
             key.required = true;
+            this.serialWrite(this.keys.indexOf(key));
 
             // in case of tie, check that it is a start note
             if (typeof note.NoteTie === 'undefined' || note === note.NoteTie.StartNote) {

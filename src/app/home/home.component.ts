@@ -40,7 +40,7 @@ export class HomePageComponent implements OnInit {
   }
 
   constructor(
-    private notes: NotesService,
+    public notes: NotesService,
     public midi: MidiService,
     public settings: SettingsService,
     private feedback: FeedbackService,
