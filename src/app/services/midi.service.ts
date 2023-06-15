@@ -44,23 +44,25 @@ export class MidiService {
 
   // if input is changed, create event listener on new input
   set input(input: MIDIInput) {
-    if (input.name) this.device = input.name;
-    input.onmidimessage = (event: MIDIMessageEvent) => {
-      const cmd = event.data[0] >> 4;
-      // const channel = event.data[0] & 0xf;
+    if (input?.name) {
+      this.device = input.name;
+      input.onmidimessage = (event: MIDIMessageEvent) => {
+        const cmd = event.data[0] >> 4;
+        // const channel = event.data[0] & 0xf;
 
-      let pitch = 0;
-      if (event.data.length > 1) pitch = event.data[1];
+        let pitch = 0;
+        if (event.data.length > 1) pitch = event.data[1];
 
-      let velocity = 0;
-      if (event.data.length > 2) velocity = event.data[2];
+        let velocity = 0;
+        if (event.data.length > 2) velocity = event.data[2];
 
-      if (cmd === this.NOTE_OFF || (cmd === this.NOTE_ON && velocity === 0)) {
-        this.noteOff(event.timeStamp, pitch);
-      } else if (cmd === this.NOTE_ON) {
-        this.noteOn(event.timeStamp, pitch, velocity);
-      }
-    };
+        if (cmd === this.NOTE_OFF || (cmd === this.NOTE_ON && velocity === 0)) {
+          this.noteOff(event.timeStamp, pitch);
+        } else if (cmd === this.NOTE_ON) {
+          this.noteOn(event.timeStamp, pitch, velocity);
+        }
+      };
+    }
   }
 
   onStateChange(access: MIDIAccess): void {
@@ -78,7 +80,7 @@ export class MidiService {
     if (this.cursor.running && !this.notes.keys[name].required) {
       // this.feedback.addText('❌', 0, 20);
 
-      // switch to different bank for audio feedback
+      // switch to different bank (harpsichord) for audio feedback
       this.output?.send([0xc0, 6]);
       // play the same note
       // TODO: replace input note instead of adding a new note
@@ -107,7 +109,9 @@ export class MidiService {
     setTimeout(() => {
       this.noteOn(Date.now() - this.notes.timePlayStart, pitch, velocity);
     }, 0);
-    this.notes.piano.keyDown({ midi: pitch });
+    if (!this.output) {
+      this.notes.piano.keyDown({ midi: pitch });
+    }
   }
 
   // Release note on Output MIDI Device
@@ -116,7 +120,9 @@ export class MidiService {
     setTimeout(() => {
       this.noteOff(Date.now() - this.notes.timePlayStart, pitch);
     }, 0);
-    this.notes.piano.keyUp({ midi: pitch });
+    if (!this.output) {
+      this.notes.piano.keyUp({ midi: pitch });
+    }
   }
 
   // Refresh wake lock for two minutes
