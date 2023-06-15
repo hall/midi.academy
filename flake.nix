@@ -15,7 +15,7 @@
           pname = package.name;
           version = package.version;
           src = ./.;
-          npmDepsHash = "sha256-8+cvF2aQyX2kTSpkRa73tnxvyvbDF52uN/EA0Hwkq18=";
+          npmDepsHash = "sha256-yJUzy5mQjAMjbJIaHyHp7ajQcvWZMVc0D9PDfayQnsA=";
           nativeBuildInputs = [
             python310
             nodejs.pkgs.node-gyp-build

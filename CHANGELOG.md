@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2023-06-15
+
+### Changed
+
+- use a single color for onscreen keyboard simplicity
+
+### Added
+
+- support for sending notes over a serial port to light an LED strip
+
 ## [0.1.3] - 2023-04-11
 
 ### Changed
