@@ -43,7 +43,7 @@ export class CursorService {
     // Skip initial rests
     if (this.notes.checkRequired()) {
       this.autoplaySkip++;
-      // this.moveToNext(cursor);
+      this.moveToNext(cursor);
     }
 
     // if required play
