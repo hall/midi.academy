@@ -121,7 +121,7 @@
   </ion-content>
 </ion-menu>
 
-<input class="ion-hide" #f type="file" (change)="loadFiles($event.target.files)" />
+<input class="ion-hide" #f type="file" accept=".mxl" (change)="loadFiles($event.target.files)" />
 
 <div class="ion-page" id="main-content">
   <ion-header>
