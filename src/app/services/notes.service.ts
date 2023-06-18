@@ -100,7 +100,7 @@ export class NotesService {
 
   // write number to serial output
   async serialWrite(note: number) {
-    await this.writer.write(this.encoder.encode(note.toString() + '\n'));
+    if (this.port) await this.writer.write(this.encoder.encode(note.toString() + '\n'));
   }
 
   clear(): void {
@@ -195,8 +195,10 @@ export class NotesService {
             key.voice = voice.ParentVoice.VoiceId;
             key.finger = note.Fingering ? note.Fingering.value : '';
             key.grace = note.IsGraceNote;
-            key.required = true;
-            this.serialWrite(this.keys.indexOf(key));
+            if (!key.required) {
+              key.required = true;
+              this.serialWrite(this.keys.indexOf(key));
+            }
 
             // in case of tie, check that it is a start note
             if (typeof note.NoteTie === 'undefined' || note === note.NoteTie.StartNote) {
